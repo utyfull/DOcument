@@ -1,0 +1,59 @@
+[33mcommit 7e59d5da4d76348ca5a63f7c5aea64868c5bafd6[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: utyfull <serg_misha1@mail.ru>
+Date:   Wed Mar 13 12:24:44 2024 +0300
+
+    mv files from other branches to create normal directory. Vadim, a moshno bilo ne sozdavat 100 vetok, nu ili hotya bi podchistil za soboy
+
+[33mcommit a2a6f1b85b9e700a6ad6664a60d524d2aa2374fa[m
+Author: utyfull <serg_misha1@mail.ru>
+Date:   Wed Mar 13 12:19:49 2024 +0300
+
+    delete useless branches, add Ivan listing
+
+[33mcommit 03753220f927952b6feb13e03463dd9a6fd50d00[m
+Author: utyfull <serg_misha1@mail.ru>
+Date:   Wed Mar 13 12:09:14 2024 +0300
+
+    Create directory for first lw
+
+[33mcommit 52d295beb042d57fa067698922554983cc1ae97c[m
+Author: Вадим Романов <vadim.romanov.05@list.ru>
+Date:   Mon Mar 11 10:05:13 2024 +0300
+
+    Name the name.py (Vadim)
+
+[33mcommit 1f9b2b615aa5bb76c9c5903e88c79ed3ffda2cc3[m
+Author: IvanTatarkin <ivankrut9@yandex.ru>
+Date:   Sun Mar 10 11:06:55 2024 +0300
+
+    add_listing
+
+[33mcommit 8bc6160549a67ee7358ed6483779bbb1f48a4901[m
+Author: IvanTatarkin <ivankrut9@yandex.ru>
+Date:   Sun Mar 10 10:50:11 2024 +0300
+
+    add_file
+
+[33mcommit e19022aa7bd0724d98e7999fc3dd865bdbea35e4[m
+Author: Вадим Романов <vadim.romanov.05@list.ru>
+Date:   Sun Mar 10 10:20:14 2024 +0300
+
+    This is a commit
+
+[33mcommit cc43308f5e0af208865e7fd6674cf077196f584e[m
+Author: Вадим Романов <vadim.romanov.05@list.ru>
+Date:   Sun Mar 10 10:19:34 2024 +0300
+
+    This is a commit
+
+[33mcommit d8a270afc726c8ba3e8817420b8623b793899376[m
+Author: utyfull <129620067+utyfull@users.noreply.github.com>
+Date:   Sat Mar 2 11:30:25 2024 +0300
+
+    Create branch name
+
+[33mcommit fb46e7994bf01341e1579ba06d373404e65d9e34[m
+Author: utyfull <129620067+utyfull@users.noreply.github.com>
+Date:   Tue Feb 27 12:58:06 2024 +0300
+
+    Initial commit
