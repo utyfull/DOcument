@@ -1,0 +1,129 @@
+DOcument  LICENSE  Lw1  README.md
+root@Kamila:~/DOcument# git branch
+* main
+root@Kamila:~/DOcument# git branch feature_merge_kamila
+root@Kamila:~/DOcument# git checkout -b feature_git_kamila
+Switched to a new branch 'feature_git_kamila'
+root@Kamila:~/DOcument# ls
+DOcument  LICENSE  Lw1  README.md
+root@Kamila:~/DOcument# cd Lw1
+root@Kamila:~/DOcument/Lw1# touch kamila.py
+root@Kamila:~/DOcument/Lw1# vim kamila.py
+root@Kamila:~/DOcument/Lw1# cat kamila.py
+print("Hello, guys")
+
+root@Kamila:~/DOcument/Lw1# git add --all
+root@Kamila:~/DOcument/Lw1# git commit -m"add code file"
+[feature_git_kamila 97196d4] add code file
+ Committer: root <root@Kamila>
+Your name and email address were configured automatically based
+on your username and hostname. Please check that they are accurate.
+You can suppress this message by setting them explicitly. Run the
+following command and follow the instructions in your editor to edit
+your configuration file:
+
+    git config --global --edit
+
+After doing this, you may fix the identity used for this commit with:
+
+    git commit --amend --reset-author
+
+ 1 file changed, 2 insertions(+)
+ create mode 100644 Lw1/kamila.py
+root@Kamila:~/DOcument/Lw1# git push --set-upstream origin feature_git_kamil
+a
+Enter passphrase for key '/root/.ssh/id_ed25519':
+Enumerating objects: 11, done.
+Counting objects: 100% (11/11), done.
+Delta compression using up to 16 threads
+Compressing objects: 100% (7/7), done.
+Writing objects: 100% (8/8), 1.10 KiB | 562.00 KiB/s, done.
+Total 8 (delta 0), reused 0 (delta 0), pack-reused 0
+remote:
+remote: Create a pull request for 'feature_git_kamila' on GitHub by visiting:
+remote:      https://github.com/utyfull/DOcument/pull/new/feature_git_kamil
+remote:
+To github.com:utyfull/DOcument.git
+ * [new branch]      feature_git_kamila -> feature_git_kamila
+Branch 'feature_git_kamila' set up to track remote branch 'feature_git_kamila' from 'origin'.
+root@Kamila:~/DOcument/Lw1# git add --all
+root@Kamila:~/DOcument/Lw1# git push
+Enter passphrase for key '/root/.ssh/id_ed25519':
+Everything up-to-date
+root@Kamila:~/DOcument/Lw1# touch trash.cmd
+root@Kamila:~/DOcument/Lw1# git add --all
+root@Kamila:~/DOcument/Lw1# git commit -m"add trash"
+[feature_git_kamila 4c861c5] add trash
+ Committer: root <root@Kamila>
+Your name and email address were configured automatically based
+on your username and hostname. Please check that they are accurate.
+You can suppress this message by setting them explicitly. Run the
+following command and follow the instructions in your editor to edit
+your configuration file:
+
+    git config --global --edit
+
+After doing this, you may fix the identity used for this commit with:
+
+    git commit --amend --reset-author
+
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 Lw1/trash.cmd
+root@Kamila:~/DOcument/Lw1# git revert 4c861c5e6da61f59bba3a240c4c8324f51373b73
+[feature_git_kamila dea2092] Revert "add trash"
+ Committer: root <root@Kamila>
+Your name and email address were configured automatically based
+on your username and hostname. Please check that they are accurate.
+You can suppress this message by setting them explicitly. Run the
+following command and follow the instructions in your editor to edit
+your configuration file:
+
+    git config --global --edit
+
+After doing this, you may fix the identity used for this commit with:
+
+    git commit --amend --reset-author
+
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ delete mode 100644 Lw1/trash.cmd
+root@Kamila:~/DOcument/Lw1# git cherry -v main
++ 97196d40a26104d5f1c9390ef7be623fb389737e add code file
++ 4c861c5e6da61f59bba3a240c4c8324f51373b73 add trash
++ dea209264b579294a67c5774506b63f0d0c652b4 Revert "add trash"
+root@Kamila:~/DOcument/Lw1# git rebase -i HEAD~2
+Successfully rebased and updated refs/heads/feature_git_kamila.
+root@Kamila:~/DOcument# git add --all
+root@Kamila:~/DOcument# git push
+Enter passphrase for key '/root/.ssh/id_ed25519':
+Everything up-to-date
+root@Kamila:~/DOcument# git checkout feature_merge_kamila
+Switched to branch 'feature_merge_kamila'
+root@Kamila:~/DOcument# ls
+DOcument  LICENSE  Lw1  README.md
+root@Kamila:~/DOcument# cd Lw1
+root@Kamila:~/DOcument/Lw1# ls
+commit_History  listing_Ivan  name.py
+root@Kamila:~/DOcument/Lw1# vim name.py
+root@Kamila:~/DOcument/Lw1# git add --all
+root@Kamila:~/DOcument/Lw1# git commit -m"adding name Kamila in name.py"
+[feature_merge_kamila 444aebe] adding name Kamila in name.py
+ Committer: root <root@Kamila>
+root@Kamila:~/DOcument/Lw1# git push --set-upstream origin feature_merge_kamila
+root@Kamila:~/DOcument/Lw1# git add --all
+root@Kamila:~/DOcument/Lw1# git push
+root@Kamila:~/DOcument/Lw1# cat name.py
+My name is Vadim.
+My name is Ivan.
+My name is Mister_Proper
+My name is Kamila
+root@Kamila:~/DOcument/Lw1# git branch origin --delete feature_merge_kamila
+error: branch 'origin' not found.
+Deleted branch feature_merge_kamila (was 444aebe).
+root@Kamila:~/DOcument/Lw1# git branch origin --delete feature_git_kamila
+error: branch 'origin' not found.
+warning: deleting branch 'feature_git_kamila' that has been merged to
+         'refs/remotes/origin/feature_git_kamila', but not yet merged to HEAD.
+Deleted branch feature_git_kamila (was dea2092).
+root@Kamila:~/DOcument/Lw1# git branch
+* main
+
