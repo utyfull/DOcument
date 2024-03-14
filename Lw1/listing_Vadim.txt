@@ -1,0 +1,166 @@
+vadim@HuaweiRomanov MINGW64 ~
+$ cd /d/D/IT_project/DOcument
+
+vadim@HuaweiRomanov MINGW64 /d/D/IT_project/DOcument (main)
+$ git clone git@github.com:utyfull/DOcument.git
+fatal: destination path 'DOcument' already exists and is not an empty directory.
+
+vadim@HuaweiRomanov MINGW64 /d/D/IT_project/DOcument (main)
+$ mkdir LW1
+
+vadim@HuaweiRomanov MINGW64 /d/D/IT_project/DOcument (main)
+$ git add --all
+
+vadim@HuaweiRomanov MINGW64 /d/D/IT_project/DOcument (main)
+$ git commit -m"Create a directory for LW1"
+
+vadim@HuaweiRomanov MINGW64 /d/D/IT_project/DOcument (main)
+$ git push
+
+vadim@HuaweiRomanov MINGW64 /d/D/IT_project/DOcument (main)
+$ rm -rf DOcument
+
+vadim@HuaweiRomanov MINGW64 /d/D/IT_project/DOcument (main)
+$ git add --all
+
+vadim@HuaweiRomanov MINGW64 /d/D/IT_project/DOcument (main)
+$ git commit -m"Create a directory for LW1"
+
+vadim@HuaweiRomanov MINGW64 /d/D/IT_project/DOcument (main)
+$ git push
+
+vadim@HuaweiRomanov MINGW64 /d/D/IT_project/DOcument (main)
+$ git branch feature_git_Vadim
+
+vadim@HuaweiRomanov MINGW64 /d/D/IT_project/DOcument (main)
+$ git branch feature_merge_Vadim
+
+vadim@HuaweiRomanov MINGW64 /d/D/IT_project/DOcument (main)
+$ git checkout feature_git_Vadim
+Switched to branch 'feature_git_Vadim'
+
+vadim@HuaweiRomanov MINGW64 /d/D/IT_project/DOcument (feature_git_Vadim)
+$ cd LW1
+
+vadim@HuaweiRomanov MINGW64 /d/D/IT_project/DOcument/LW1 (feature_git_Vadim)
+$ touch Vadim_code.py
+
+vadim@HuaweiRomanov MINGW64 /d/D/IT_project/DOcument/LW1 (feature_git_Vadim)
+$ git add --all
+
+vadim@HuaweiRomanov MINGW64 /d/D/IT_project/DOcument/LW1 (feature_git_Vadim)
+$ git commit -m"Add the first Vadim's programm to LW1"
+[feature_git_Vadim 3e6281c] Add the first Vadim's programm to LW1
+ 1 file changed, 8 insertions(+)
+ create mode 100644 LW1/Vadim_code.py
+
+vadim@HuaweiRomanov MINGW64 /d/D/IT_project/DOcument/LW1 (feature_git_Vadim)
+$ git push --set-upstream origin feature_git_Vadim
+
+vadim@HuaweiRomanov MINGW64 /d/D/IT_project/DOcument/LW1 (feature_git_Vadim)
+$ git add --all
+
+vadim@HuaweiRomanov MINGW64 /d/D/IT_project/DOcument/LW1 (feature_git_Vadim)
+$ git commit -m"Add the first Vadim's programm to LW1"
+
+vadim@HuaweiRomanov MINGW64 /d/D/IT_project/DOcument/LW1 (feature_git_Vadim)
+$ git push
+
+vadim@HuaweiRomanov MINGW64 /d/D/IT_project/DOcument/LW1 (feature_git_Vadim)
+$ touch Vadim_file.txt
+
+vadim@HuaweiRomanov MINGW64 /d/D/IT_project/DOcument/LW1 (feature_git_Vadim)
+$ git add --all
+
+vadim@HuaweiRomanov MINGW64 /d/D/IT_project/DOcument/LW1 (feature_git_Vadim)
+$ git commit -m"Add the first Vadim's file to LW1"
+
+vadim@HuaweiRomanov MINGW64 /d/D/IT_project/DOcument/LW1 (feature_git_Vadim)
+$ git push
+
+vadim@HuaweiRomanov MINGW64 /d/D/IT_project/DOcument (feature_git_Vadim)
+$ git cherry -v main
++ 3e6281cba68d7417555830274f4a98e84087d13c Add the first Vadim's programm to LW1
++ d7ea150edbd082c0b50fc3402f42a4511236720c Add the first Vadim's programm to LW1
++ b8ffc25d16d3ef037c0e23a3ba7bec4f429391a1 Add the first Vadim's file to LW1
+
+vadim@HuaweiRomanov MINGW64 /d/D/IT_project/DOcument (feature_git_Vadim)
+$ git rebase -i HEAD~3
+[detached HEAD 992cf2b] Add the first Vadim's programm to LW1
+ Date: Mon Mar 11 09:19:02 2024 +0300
+ 5 files changed, 53 insertions(+)
+ create mode 100644 LW1/.vscode/tasks.json
+ create mode 100644 LW1/Vadim_code.c
+ create mode 100644 LW1/Vadim_code.exe
+ create mode 100644 LW1/Vadim_code.py
+ create mode 100644 LW1/Vadim_file.txt
+Successfully rebased and updated refs/heads/feature_git_Vadim.
+
+vadim@HuaweiRomanov MINGW64 /d/D/IT_project/DOcument (feature_git_Vadim)
+$ git add --all
+
+vadim@HuaweiRomanov MINGW64 /d/D/IT_project/DOcument (feature_git_Vadim)
+$ git push --force
+
+vadim@HuaweiRomanov MINGW64 /d/D/IT_project/DOcument (feature_git_Vadim)
+$ git add --all
+
+vadim@HuaweiRomanov MINGW64 /d/D/IT_project/DOcument (feature_git_Vadim)
+$ git commit -m"Add changes in Vadim's text file"
+[feature_git_Vadim 5e116d9] Add changes in Vadim's text file
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+vadim@HuaweiRomanov MINGW64 /d/D/IT_project/DOcument (feature_git_Vadim)
+$ git push
+
+vadim@HuaweiRomanov MINGW64 /d/D/IT_project/DOcument (feature_git_Vadim)
+$ git checkout feature_merge_Vadim
+Switched to branch 'feature_merge_Vadim'
+
+vadim@HuaweiRomanov MINGW64 /d/D/IT_project/DOcument (feature_merge_Vadim)
+$ cat name.py
+My name is main
+
+vadim@HuaweiRomanov MINGW64 /d/D/IT_project/DOcument (feature_merge_Vadim)
+$ vi name.py (ввести i для редактирования текста, потом esc, потом ZZ для сохранения и выхода)
+
+vadim@HuaweiRomanov MINGW64 /d/D/IT_project/DOcument (feature_merge_Vadim)
+$ git add --all
+
+vadim@HuaweiRomanov MINGW64 /d/D/IT_project/DOcument (feature_merge_Vadim)
+$ git commit -m"Name the name.py (Vadim)"
+[feature_merge_Vadim 52d295b] Name the name.py (Vadim)
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+vadim@HuaweiRomanov MINGW64 /d/D/IT_project/DOcument (feature_merge_Vadim)
+$  git push --set-upstream origin feature_merge_Vadim
+
+vadim@HuaweiRomanov MINGW64 /d/D/IT_project/DOcument (feature_merge_Vadim)
+$ git checkout main
+Switched to branch 'main'
+Your branch is up to date with 'origin/main'.
+
+vadim@HuaweiRomanov MINGW64 /d/D/IT_project/DOcument (main)
+$ git merge feature_merge_Vadim
+Updating 1f9b2b6..52d295b
+Fast-forward
+ name.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+vadim@HuaweiRomanov MINGW64 /d/D/IT_project/DOcument (main)
+$ git add --all
+
+vadim@HuaweiRomanov MINGW64 /d/D/IT_project/DOcument (main)
+$ git commit -m"Merge branch main with feature_merge_Vadim"
+On branch main
+Your branch is ahead of 'origin/main' by 1 commit.
+  (use "git push" to publish your local commits)
+
+nothing to commit, working tree clean
+
+vadim@HuaweiRomanov MINGW64 /d/D/IT_project/DOcument (main)
+$ git push
+Total 0 (delta 0), reused 0 (delta 0), pack-reused 0
+To github.com:utyfull/DOcument.git
+   1f9b2b6..52d295b  main -> main
+
