@@ -216,4 +216,53 @@ ivan@ivan-ASUS:~/DOcument/Lw1$ git rm Ivan_code.py
 rm 'Lw1/Ivan_code.py'
 ivan@ivan-ASUS:~/DOcument/Lw1$ ls
 listing_Ivan  listing_Kamila  listing_Vadim.txt  name.py
+ivan@ivan-ASUS:~/DOcument/Lw1$ git add --all
+ivan@ivan-ASUS:~/DOcument/Lw1$ git commit -m 
+error: switch `m' requires a value
+ivan@ivan-ASUS:~/DOcument/Lw1$ git commit -m 'change_listing'
+[feature_git_Ivan 2978d97] change_listing
+ 2 files changed, 219 insertions(+), 126 deletions(-)
+ delete mode 100644 Lw1/Ivan_code.py
+ rewrite Lw1/listing_Ivan (88%)
+ivan@ivan-ASUS:~/DOcument/Lw1$ ls
+listing_Ivan  listing_Kamila  listing_Vadim.txt  name.py
+ivan@ivan-ASUS:~/DOcument/Lw1$ git checkout main
+Переключились на ветку «main»
+Эта ветка соответствует «origin/main».
+ivan@ivan-ASUS:~/DOcument/Lw1$ git checkout feature_git_Ivan 
+Переключились на ветку «feature_git_Ivan»
+ivan@ivan-ASUS:~/DOcument/Lw1$ git log
+commit 2978d97ad1c347f3f94fb631b2f21a5d41eff0ad (HEAD -> feature_git_Ivan)
+Author: IvanTatarkin <ivankrut9@yandex.ru>
+Date:   Fri Mar 15 20:52:10 2024 +0300
+
+    change_listing
+
+commit 0e208d14ea251d5c426b9b323a6285934299fe81
+Author: IvanTatarkin <ivankrut9@yandex.ru>
+Date:   Fri Mar 15 20:48:16 2024 +0300
+
+    Revert "add listing, merge"
+    
+    This reverts commit 2175028bb7a0faf15a59b0cbabe03bd533fd99db.
+
+commit c436d9b9e19d3ec73a33b2b139c26c1809f0c6bc
+Author: IvanTatarkin <ivankrut9@yandex.ru>
+Date:   Fri Mar 15 20:44:17 2024 +0300
+
+    change_code
+
+commit 87625712e8e86e9cce2cc32f4016e3fe32e99387 (merge_git_Ivan)
+Author: IvanTatarkin <ivankrut9@yandex.ru>
+Date:   Fri Mar 15 20:39:45 2024 +0300
+
+[2]+  Остановлен    git log
+ivan@ivan-ASUS:~/DOcument/Lw1$ git revert 0e208d14ea251d5c426b9b323a6285934299fe81 "revert_normal"
+fatal: bad revision 'revert_normal'
+ivan@ivan-ASUS:~/DOcument/Lw1$ git revert 0e208d14ea251d5c426b9b323a6285934299fe81
+[feature_git_Ivan 191d6af] Revert "Revert "add listing, merge""
+ 2 files changed, 374 insertions(+), 1 deletion(-)
+ create mode 100644 Lw1/listing_Misha
+ivan@ivan-ASUS:~/DOcument/Lw1$ ls
+listing_Ivan  listing_Kamila  listing_Misha  listing_Vadim.txt  name.py
 
