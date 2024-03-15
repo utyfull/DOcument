@@ -1,124 +1,219 @@
 ivan@ivan-ASUS:~$ git clone https://github.com/utyfull/DOcument
+fatal: целевой путь «DOcument» уже существует и не является пустым каталогом.
+ivan@ivan-ASUS:~$ git clone https://github.com/utyfull/DOcument
 Клонирование в «DOcument»...
 Username for 'https://github.com': IvanTatarkin
 Password for 'https://IvanTatarkin@github.com': 
-remote: Enumerating objects: 11, done.
-remote: Counting objects: 100% (11/11), done.
-remote: Compressing objects: 100% (7/7), done.
-remote: Total 11 (delta 2), reused 5 (delta 1), pack-reused 0
-Получение объектов: 100% (11/11), готово.
-Определение изменений: 100% (2/2), готово.
-ivan@ivan-ASUS:~$ git checkout -b Ivan
+remote: Enumerating objects: 62, done.
+remote: Counting objects: 100% (62/62), done.
+remote: Compressing objects: 100% (48/48), done.
+remote: Total 62 (delta 15), reused 55 (delta 9), pack-reused 0
+Получение объектов: 100% (62/62), 16.19 КиБ | 1.80 МиБ/с, готово.
+Определение изменений: 100% (15/15), готово.
+ivan@ivan-ASUS:~$ git checkout -b feature_git_Ivan
 fatal: не найден git репозиторий (или один из родительских каталогов): .git
 ivan@ivan-ASUS:~$ cd Document
 bash: cd: Document: Нет такого файла или каталога
-ivan@ivan-ASUS:~$ ls
- 11_listing   Inf_Labs         README.md   Документы     Общедоступные
- DOcument     lab8.c~          snap        Загрузки     'Рабочий стол'
- fff          listing_10_lab   turing      Изображения   Шаблоны
- files.txt    listing.txt      Видео       Музыка
 ivan@ivan-ASUS:~$ cd DOcument
-ivan@ivan-ASUS:~/DOcument$ git checkout -b Ivan
-Переключились на новую ветку «Ivan»
-ivan@ivan-ASUS:~/DOcument$ git touch test
-git: «touch» не является командой git. Смотрите «git --help».
-ivan@ivan-ASUS:~/DOcument$ touch test
-ivan@ivan-ASUS:~/DOcument$ git add --all
-ivan@ivan-ASUS:~/DOcument$ got commit -m 'add_file'
-Команда «got» не найдена, но есть 17 похожих.
-ivan@ivan-ASUS:~/DOcument$ git commit -m 'add_file'
-[Ivan 8bc6160] add_file
- 1 file changed, 0 insertions(+), 0 deletions(-)
- create mode 100644 test
-ivan@ivan-ASUS:~/DOcument$ git push
-fatal: Текущая ветка Ivan не имеет вышестоящей ветки.
+ivan@ivan-ASUS:~/DOcument$ git checkout -b feature_git_Ivan
+Переключились на новую ветку «feature_git_Ivan»
+ivan@ivan-ASUS:~/DOcument$ touch Ivan_code.py
+ivan@ivan-ASUS:~/DOcument$ rm Ivan_code.py
+ivan@ivan-ASUS:~/DOcument$ cd Lw1
+ivan@ivan-ASUS:~/DOcument/Lw1$ touch Ivan_code.py
+ivan@ivan-ASUS:~/DOcument/Lw1$ git add --all
+ivan@ivan-ASUS:~/DOcument/Lw1$ git commit -m "add Ivan_programm'
+> ^C
+ivan@ivan-ASUS:~/DOcument/Lw1$ git commit -m "add Ivan_programm"
+[feature_git_Ivan 8762571] add Ivan_programm
+ 1 file changed, 1 insertion(+)
+ create mode 100644 Lw1/Ivan_code.py
+ivan@ivan-ASUS:~/DOcument/Lw1$ git push
+fatal: Текущая ветка feature_git_Ivan не имеет вышестоящей ветки.
 Чтобы отправить текущую ветку и установить внешнюю ветку как вышестоящую для этой ветки, используйте
 
-    git push --set-upstream origin Ivan
+    git push --set-upstream origin feature_git_Ivan
 
-ivan@ivan-ASUS:~/DOcument$ ^C
-ivan@ivan-ASUS:~/DOcument$ git push --set-upstream origin Ivan
-Username for 'https://github.com': IvanTatarkin
-Password for 'https://IvanTatarkin@github.com': 
-Перечисление объектов: 4, готово.
-Подсчет объектов: 100% (4/4), готово.
-При сжатии изменений используется до 12 потоков
-Сжатие объектов: 100% (2/2), готово.
-Запись объектов: 100% (3/3), 266 байтов | 266.00 КиБ/с, готово.
-Всего 3 (изменений 1), повторно использовано 1 (изменений 0), повторно использовано пакетов 0
-remote: Resolving deltas: 100% (1/1), completed with 1 local object.
-remote: 
-remote: Create a pull request for 'Ivan' on GitHub by visiting:
-remote:      https://github.com/utyfull/DOcument/pull/new/Ivan
-remote: 
-To https://github.com/utyfull/DOcument
- * [new branch]      Ivan -> Ivan
-Ветка «Ivan» отслеживает внешнюю ветку «Ivan» из «origin».
-ivan@ivan-ASUS:~/DOcument$ git checkout main
-Переключились на ветку «main»
-Эта ветка соответствует «origin/main».
-ivan@ivan-ASUS:~/DOcument$ git merge Ivan
-Обновление e19022a..8bc6160
-Fast-forward
- test | 0
- 1 file changed, 0 insertions(+), 0 deletions(-)
- create mode 100644 test
-ivan@ivan-ASUS:~/DOcument$ git push
-Username for 'https://github.com': IvanTatarkin
-Password for 'https://IvanTatarkin@github.com': 
-Всего 0 (изменений 0), повторно использовано 0 (изменений 0), повторно использовано пакетов 0
-To https://github.com/utyfull/DOcument
-   e19022a..8bc6160  main -> main
-ivan@ivan-ASUS:~/DOcument$ git show
-commit 8bc6160549a67ee7358ed6483779bbb1f48a4901 (HEAD -> main, origin/main, origin/Ivan, origin/HEAD, Ivan)
+ivan@ivan-ASUS:~/DOcument/Lw1$ git push --set-upstream origin feature_git_Ivan
+Username for 'https://github.com': IvanTatarkin^C
+ivan@ivan-ASUS:~/DOcument/Lw1$ git branch merge_git_Ivan
+ivan@ivan-ASUS:~/DOcument/Lw1$ git branch
+* feature_git_Ivan
+  main
+  merge_git_Ivan
+ivan@ivan-ASUS:~/DOcument/Lw1$ git add --all
+ivan@ivan-ASUS:~/DOcument/Lw1$ git commit -m "change_code"
+[feature_git_Ivan c436d9b] change_code
+ 1 file changed, 1 insertion(+)
+ivan@ivan-ASUS:~/DOcument/Lw1$ git revert
+использование: git revert [<опции>] <указатель-коммита>...
+   или: git revert <подкоманда>
+
+    --quit                конец последовательности копирования или обращения изменений коммитов
+    --continue            продолжить последовательность копирования или обращения изменений коммитов
+    --abort               отмена последовательности копирования или обращения изменений коммитов
+    --skip                skip current commit and continue
+    --cleanup <режим>     как удалять пробелы и #комментарии из сообщения коммита
+    -n, --no-commit       не коммитить автоматически
+    -e, --edit            изменить сообщение коммита
+    -s, --signoff         add a Signed-off-by trailer
+    -m, --mainline <номер-родителя>
+                          выбор основного родителя
+    --rerere-autoupdate   обновить индекс с помощью переиспользования разрешения конфликта, если возможно
+    --strategy <стратегия>
+                          стратегия слияния
+    -X, --strategy-option <опция>
+                          опция для стратегии слияния
+    -S, --gpg-sign[=<key-id>]
+                          подписать коммит с помощью GPG
+
+ivan@ivan-ASUS:~/DOcument/Lw1$ git log
+commit c436d9b9e19d3ec73a33b2b139c26c1809f0c6bc (HEAD -> feature_git_Ivan)
 Author: IvanTatarkin <ivankrut9@yandex.ru>
-Date:   Sun Mar 10 10:50:11 2024 +0300
+Date:   Fri Mar 15 20:44:17 2024 +0300
 
-    add_file
+    change_code
 
-diff --git a/test b/test
-new file mode 100644
-index 0000000..e69de29
-ivan@ivan-ASUS:~/DOcument$ git merge Ivan
-Уже актуально.
-ivan@ivan-ASUS:~/DOcument$ git rebase
-Текущая ветка main уже в актуальном состоянии.
-ivan@ivan-ASUS:~/DOcument$ git branch -D Ivan
-Ветка Ivan удалена (была 8bc6160).
-ivan@ivan-ASUS:~/DOcument$ git add --all
-ivan@ivan-ASUS:~/DOcument$ git commit -m 'delete_Ivan'
-Текущая ветка: main
-Эта ветка соответствует «origin/main».
+commit 87625712e8e86e9cce2cc32f4016e3fe32e99387 (merge_git_Ivan)
+Author: IvanTatarkin <ivankrut9@yandex.ru>
+Date:   Fri Mar 15 20:39:45 2024 +0300
 
-нечего коммитить, нет изменений в рабочем каталоге
-ivan@ivan-ASUS:~/DOcument$ git push
-Username for 'https://github.com': IvanTatarkin
-Password for 'https://IvanTatarkin@github.com': 
-Everything up-to-date
-ivan@ivan-ASUS:~/DOcument$ git branch
-* main
-ivan@ivan-ASUS:~/DOcument$ git add -all
-error: имелось в виду `--all` (с двумя дефисами)?
-ivan@ivan-ASUS:~/DOcument$ 
-ivan@ivan-ASUS:~/DOcument$ git add --all
-ivan@ivan-ASUS:~/DOcument$ git commit -m 'delete_Ivan'
-Текущая ветка: main
-Эта ветка соответствует «origin/main».
+    add Ivan_programm
 
-нечего коммитить, нет изменений в рабочем каталоге
-ivan@ivan-ASUS:~/DOcument$ git push
-Username for 'https://github.com': IvanTatarkin
-Password for 'https://IvanTatarkin@github.com': 
-Everything up-to-date
-ivan@ivan-ASUS:~/DOcument$ git branch
-* main
-ivan@ivan-ASUS:~/DOcument$ git branch
-* main
-ivan@ivan-ASUS:~/DOcument$ git branch -D Ivan
-error: ветка «Ivan» не найдена.
-ivan@ivan-ASUS:~/DOcument$ git push origin --delete Ivan
-Username for 'https://github.com': IvanTatarkin
-Password for 'https://IvanTatarkin@github.com': 
-To https://github.com/utyfull/DOcument
- - [deleted]         Ivan
+commit e25660bae073d9bd4986ca3bb4b5424c2ad26684 (origin/main, origin/HEAD, main)
+Author: utyfull <serg_misha1@mail.ru>
+Date:   Thu Mar 14 13:04:27 2024 +0300
+
+    delete file with git log
+
+commit 2175028bb7a0faf15a59b0cbabe03bd533fd99db
+Author: utyfull <serg_misha1@mail.ru>
+Date:   Thu Mar 14 13:00:01 2024 +0300
+
+    add listing, merge
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+commit c436d9b9e19d3ec73a33b2b139c26c1809f0c6bc (HEAD -> feature_git_Ivan)
+Author: IvanTatarkin <ivankrut9@yandex.ru>
+Date:   Fri Mar 15 20:44:17 2024 +0300
+
+    change_code
+
+commit 87625712e8e86e9cce2cc32f4016e3fe32e99387 (merge_git_Ivan)
+Author: IvanTatarkin <ivankrut9@yandex.ru>
+Date:   Fri Mar 15 20:39:45 2024 +0300
+
+    add Ivan_programm
+
+commit e25660bae073d9bd4986ca3bb4b5424c2ad26684 (origin/main, origin/HEAD, main)
+Author: utyfull <serg_misha1@mail.ru>
+Date:   Thu Mar 14 13:04:27 2024 +0300
+
+    delete file with git log
+
+commit 2175028bb7a0faf15a59b0cbabe03bd533fd99db
+Author: utyfull <serg_misha1@mail.ru>
+Date:   Thu Mar 14 13:00:01 2024 +0300
+
+    add listing, merge
+:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+commit c436d9b9e19d3ec73a33b2b139c26c1809f0c6bc (HEAD -> feature_git_Ivan)
+Author: IvanTatarkin <ivankrut9@yandex.ru>
+Date:   Fri Mar 15 20:44:17 2024 +0300
+
+    change_code
+
+commit 87625712e8e86e9cce2cc32f4016e3fe32e99387 (merge_git_Ivan)
+Author: IvanTatarkin <ivankrut9@yandex.ru>
+Date:   Fri Mar 15 20:39:45 2024 +0300
+
+    add Ivan_programm
+
+commit e25660bae073d9bd4986ca3bb4b5424c2ad26684 (origin/main, origin/HEAD, main)
+Author: utyfull <serg_misha1@mail.ru>
+Date:   Thu Mar 14 13:04:27 2024 +0300
+
+    delete file with git log
+
+commit 2175028bb7a0faf15a59b0cbabe03bd533fd99db
+Author: utyfull <serg_misha1@mail.ru>
+Date:   Thu Mar 14 13:00:01 2024 +0300
+
+    add listing, merge
+
+commit 07de698bf190a58c62b1b9f6adbc42fae84f8372
+Author: Вадим Романов <vadim.romanov.05@list.ru>
+Date:   Thu Mar 14 08:00:45 2024 +0300
+
+    Add Vadim's listing from LW1
+
+commit 559320ae2509a114f3bae36e9c81cc4a25a4e282
+Author: Kamusheck <144661815+Kamusheck@users.noreply.github.com>
+Date:   Wed Mar 13 22:19:35 2024 +0300
+
+    Deleting trash
+
+[1]+  Остановлен    git log
+ivan@ivan-ASUS:~/DOcument/Lw1$ git revert 2175028bb7a0faf15a59b0cbabe03bd533fd99db
+[feature_git_Ivan 0e208d1] Revert "add listing, merge"
+ 2 files changed, 1 insertion(+), 374 deletions(-)
+ delete mode 100644 Lw1/listing_Misha
+ivan@ivan-ASUS:~/DOcument/Lw1$ git revert 2175028bb7a0faf15a59b0cbabe03bd533fd99db "delete_commit"
+fatal: bad revision 'delete_commit'
+ivan@ivan-ASUS:~/DOcument/Lw1$ ls
+Ivan_code.py  listing_Ivan  listing_Kamila  listing_Vadim.txt  name.py
+ivan@ivan-ASUS:~/DOcument/Lw1$ cat Ivan_code.py
+print('Hello world')
+print(1)
+ivan@ivan-ASUS:~/DOcument/Lw1$ git rm Ivan_code.py
+rm 'Lw1/Ivan_code.py'
+ivan@ivan-ASUS:~/DOcument/Lw1$ ls
+listing_Ivan  listing_Kamila  listing_Vadim.txt  name.py
 
