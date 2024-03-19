@@ -1,2 +1,2 @@
-# It-project
-Subject project
+# DOcument
+CLI application for document management 
