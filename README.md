@@ -1,2 +1,2 @@
 # DOcument
-CLI application for document management 
+WEB-application for document management 
