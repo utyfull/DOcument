@@ -15,17 +15,17 @@ class AuthTable(models.Model):
     reg_time = models.DateTimeField(auto_now_add=True)
     # …
 
-    # Метаданные
-    class Meta:
-        pass
+    # # Метаданные
+    # class Meta:
+    #     pass
 
 
-    # Methods
-    def get_absolute_url(self):
-        return reverse('model-detail-view', args=[str(self.user_id)])
+    # # Methods
+    # def get_absolute_url(self):
+    #     return reverse('model-detail-view', args=[str(self.user_id)])
 
-    def __str__(self):
-        return self.my_field_name
+    # def __str__(self):
+    #     return self.my_field_name
     
 
 class OwnDocTable(models.Model):
@@ -37,17 +37,17 @@ class OwnDocTable(models.Model):
     status = models.CharField(max_length=20)
     # …
 
-    # Метаданные
-    class Meta:
-        pass
+    # # Метаданные
+    # class Meta:
+    #     pass
 
 
-    # Methods
-    def get_absolute_url(self):
-        return reverse('model-detail-view', args=[str(self.doc_id)])
+    # # Methods
+    # def get_absolute_url(self):
+    #     return reverse('model-detail-view', args=[str(self.doc_id)])
 
-    def __str__(self):
-        return self.my_field_name
+    # def __str__(self):
+    #     return self.my_field_name
 
 
 class ForeignDocTable(models.Model):
@@ -59,16 +59,16 @@ class ForeignDocTable(models.Model):
     # …
 
     # Метаданные
-    class Meta:
-        pass
+    # class Meta:
+    #     pass
 
 
-    # Methods
-    def get_absolute_url(self):
-        return reverse('model-detail-view', args=[str(self.foreign_doc_id)])
+    # # Methods
+    # def get_absolute_url(self):
+    #     return reverse('model-detail-view', args=[str(self.foreign_doc_id)])
 
-    def __str__(self):
-        return self.my_field_name
+    # def __str__(self):
+    #     return self.my_field_name
     
 
 class StatusTable(models.Model):
@@ -79,17 +79,17 @@ class StatusTable(models.Model):
     status = models.CharField(max_length=20)
     # …
 
-    # Метаданные
-    class Meta:
-        pass
+    # # Метаданные
+    # class Meta:
+    #     pass
 
 
-    # Methods
-    def get_absolute_url(self):
-        return reverse('model-detail-view', args=[str(self.foreign_user_id)])
+    # # Methods
+    # def get_absolute_url(self):
+    #     return reverse('model-detail-view', args=[str(self.foreign_user_id)])
 
-    def __str__(self):
-        return self.my_field_name
+    # def __str__(self):
+    #     return self.my_field_name
 
 
 class CommentTable(models.Model):
@@ -100,15 +100,15 @@ class CommentTable(models.Model):
     comment_time = models.DateTimeField(auto_now_add=True)
     # …
 
-    # Метаданные
-    class Meta:
-        pass
+    # # Метаданные
+    # class Meta:
+    #     pass
 
 
-    # Methods
-    def get_absolute_url(self):
-        return reverse('model-detail-view', args=[str(self.comment_id)])
+    # # Methods
+    # def get_absolute_url(self):
+    #     return reverse('model-detail-view', args=[str(self.comment_id)])
 
-    def __str__(self):
-        return self.my_field_name
+    # def __str__(self):
+    #     return self.my_field_name
 

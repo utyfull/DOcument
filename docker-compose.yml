@@ -49,4 +49,10 @@ volumes:
 networks:
   postgres:
     driver: bridge
+    ipam:
+     config:
+       - subnet: 172.10.0.0/16
+         gateway: 172.10.5.254
+         aux_addresses:
+          postgres: 172.10.0.2
     
