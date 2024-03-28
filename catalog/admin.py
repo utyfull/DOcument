@@ -2,6 +2,9 @@ from django.contrib import admin
 
 from .models import AuthTable, OwnDocTable, ForeignDocTable, StatusTable, CommentTable
 
+from .models import Book
+
+
 # Register your models here.
 
 
@@ -11,6 +14,10 @@ class AuthAdmin(admin.ModelAdmin):
     list_filter = ('username', 'reg_time')
         
 # Register the Admin classes for BookInstance using the decorator
+
+@admin.register(Book)
+class Book(admin.ModelAdmin):
+    pass
 
 @admin.register(OwnDocTable)
 class OwnDocAdmin(admin.ModelAdmin):

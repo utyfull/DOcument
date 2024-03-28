@@ -24,3 +24,5 @@ TestResults.xml
 __pycache__/
 #python venv 
 .venv/
+#doc file storage
+#data_file/

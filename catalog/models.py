@@ -33,7 +33,9 @@ class OwnDocTable(models.Model):
     doc_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user_id = models.ForeignKey('AuthTable', on_delete=models.CASCADE)
     file_name = models.CharField(max_length=100)
-    #file = models
+    file = models.FileField(upload_to='data_file', default='default_file.txt')
+
+
     status = models.CharField(max_length=20)
     # …
 
@@ -112,3 +114,17 @@ class CommentTable(models.Model):
     # def __str__(self):
     #     return self.my_field_name
 
+
+
+
+class Book(models.Model):
+     title = models.CharField(max_length=150)
+     cover = models.ImageField(upload_to='images/')
+     book = models.FileField(upload_to='books/')
+
+     def __str__(self):
+         return self.title
+
+#class Foo(models.Model):
+    # Указывает на абсолютный путь
+    #audio = models.FilePathField(path='/home/user/')
