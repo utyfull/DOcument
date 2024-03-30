@@ -25,4 +25,4 @@ __pycache__/
 #python venv 
 .venv/
 #doc file storage
-#data_file/
+data_file/
