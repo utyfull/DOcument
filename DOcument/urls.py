@@ -23,27 +23,29 @@ from django.views.generic import RedirectView
 # Только на период разработки
 from django.conf import settings
 from django.conf.urls.static import static
+from catalog.views import home_page
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', home_page)
 ]
-
 # Используйте include() чтобы добавлять URL из каталога приложения
 
-urlpatterns += [
-     path('catalog/', include('catalog.urls')),
-]
+# urlpatterns += [
+#      path('catalog/', include('catalog.urls')),
+# ]
 
 
-# Добавьте URL соотношения, чтобы перенаправить запросы с корневого URL, на URL приложения
+# # Добавьте URL соотношения, чтобы перенаправить запросы с корневого URL, на URL приложения
 
-urlpatterns += [
-    path('', RedirectView.as_view(url='/catalog/', permanent=True)),
-]
+# # urlpatterns += [
+# #     path('', RedirectView.as_view(url='/catalog/', permanent=True)),
+# # ]
 
 
 # Используйте static() чтобы добавить соотношения для статических файлов
 # Только на период разработки
 
-urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-
+#urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+if settings.DEBUG:
+    urlpatterns += static(settings.DATA_FILE_URL, document_root=settings.DATA_FILE_ROOT)

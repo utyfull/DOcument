@@ -21,6 +21,8 @@ rad.json
 #Test results file
 TestResults.xml
 #Python cache folder
-.__pycache__/
+__pycache__/
 #python venv 
 .venv/
+#doc file storage
+#data_file/

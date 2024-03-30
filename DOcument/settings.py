@@ -76,8 +76,12 @@ WSGI_APPLICATION = 'DOcument.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'main_db',
+        'USER': 'utyfull',
+        'PASSWORD': '1215010q',
+        'HOST': '172.10.0.1',
+        'PORT': '5432'
     }
 }
 
@@ -116,9 +120,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = 'static/'
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+STATIC_URL = '/static/'
+DATA_FILE_URL = 'data_file/'
+DATA_FILE_ROOT = Path('data_file/')
