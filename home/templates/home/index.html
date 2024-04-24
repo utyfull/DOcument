@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Страница с двумя блоками</title>
+    <style>
+      /* Стили для блоков */
+      .block1 {
+        width: 500px; /* Ширина блока */
+        height: 250px; /* Высота блока */
+        background-color: #f0f0f0; /* Цвет фона блока */ /* Выравнивание блока по центру */
+        margin-top: 200px;
+        margin-left: 150px; /* Отступ сверху блока */
+        text-align: center; /* Выравнивание текста по центру в блоке */
+        line-height: 200px; /* Выравнивание по вертикали текста в блоке */
+        font-size: 24px; /* Размер шрифта */
+        border: 1px solid #ccc; /* Обводка блока */
+        border-radius: 20px;
+      }
+      .block2 {
+        width: 500px; /* Ширина блока */
+        height: 250px; /* Высота блока */
+        background-color: #f0f0f0; /* Цвет фона блока */ /* Выравнивание блока по центру */
+        margin-top: -250px; /* Отступ сверху блока */
+        margin-left: 850px;
+        text-align: center; /* Выравнивание текста по центру в блоке */
+        line-height: 200px; /* Выравнивание по вертикали текста в блоке */
+        font-size: 24px; /* Размер шрифта */
+        border: 1px solid #ccc; /* Обводка блока */
+        border-radius: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="block1">
+      <a href="{% url 'users:autorization' %}">autorization</a>
+      <!-- Ссылка на другую страницу -->
+    </div>
+    <div class="block2">
+      <a href="{% url 'users:registration' %}">registration</a>
+      <!-- Ссылка на другую страницу -->
+    </div>
+  </body>
+</html>

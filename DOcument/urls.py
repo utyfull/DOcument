@@ -27,7 +27,7 @@ from catalog.views import home_page
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', home_page)
+    path('', include('home.urls'))
 ]
 # Используйте include() чтобы добавлять URL из каталога приложения
 
