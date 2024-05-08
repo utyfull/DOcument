@@ -1,38 +1,37 @@
-{% extends 'users/base.html'%}
+{% extends 'users/base.html' %}
 
 {% block main %}
-{% if form.errors %}
-    <div class="alert alert-warning alert-dismissible fade show" role="alert"
-         style="margin-top: 50px;">
-        {{ form.errors }}
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-{% endif %}
-<h1>Registration</h1>
-<form action="{% url 'users:registration' %}" method="post">
-    {% csrf_token %}
-<div class="input-box">
-    {{ form.username }}
-    <i class="bx bxs-user-circle"></i>
-</div>
-<div class="input-box">
-    {{ form.password}}
-    <i class="bx bxs-lock"></i>
-</div>
-<div class="input-box">
-    {{ form.password}}
-    <i class="bx bxs-lock"></i>
-</div>
-<button type="submit" class="" btn>Sign up</button>
+    {% if form.errors %}
+        <div class="alert alert-warning alert-dismissible fade show" role="alert" style="margin-top: 50px;">
+            {{ form.errors }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    {% endif %}
+    <h1>Registration</h1>
+    <form action="{% url 'users:registration' %}" method="post">
+        {% csrf_token %}
+        <div class="input-box">
+            {{ form.username }}
+            <i class="bx bxs-user-circle"></i>
+        </div>
+        <div class="input-box">
+            {{ form.password1 }}
+            <i class="bx bxs-lock"></i>
+        </div>
+        <div class="input-box">
+            {{ form.password2 }}
+            <i class="bx bxs-lock"></i>
+        </div>
+        <button type="submit" class="btn btn-primary">Sign up</button>
 
-<div class="">
-    <p>
-        already have an account?
-        <a href="{% url 'users:autorization' %}">log in</a
-        ><!вставляется ссылка на страницу на авторизацию>
-    </p>
-</div>
-</form>
+        <div>
+            <p>
+                already have an account?
+                <a href="{% url 'users:autorization' %}">log in</a>
+
+            </p>
+        </div>
+    </form>
 {% endblock %}

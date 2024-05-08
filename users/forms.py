@@ -15,13 +15,14 @@ class UserLoginForm(AuthenticationForm):
         fields = ('username', 'password')
 
 
+
 class UserRegistrationForm(UserCreationForm):
     username = forms.CharField(widget=forms.TextInput(attrs={
         'class': 'form-control py-4', 'placeholder': 'username'}))
-    password = forms.CharField(widget=forms.PasswordInput(attrs={
+    password1 = forms.CharField(widget=forms.PasswordInput(attrs={
         'class': 'form-control py-4', 'placeholder': 'password'}))
     password2 = forms.CharField(widget=forms.PasswordInput(attrs={
-        'class': 'form-control py-4', 'placeholder': ''}))
+        'class': 'form-control py-4', 'placeholder': 'confirm password'}))
 
     class Meta:
         model = User
