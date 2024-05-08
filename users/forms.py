@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
-
+from .models import UserFile
 from users.models import User
 
 
@@ -27,3 +27,8 @@ class UserRegistrationForm(UserCreationForm):
     class Meta:
         model = User
         fields = ('username', 'password1', 'password2')
+
+class FileUploadForm(forms.ModelForm):
+    class Meta:
+        model = UserFile
+        fields = ['name', 'file']

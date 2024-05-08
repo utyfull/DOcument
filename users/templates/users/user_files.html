@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Files</title>
+</head>
+<body>
+    <h1>User Files</h1>
+    <ul>
+        {% for file in file_contents %}
+            <li>{{ file.name }}</li>
+            <pre>{{ file.content }}</pre>
+        {% endfor %}
+    </ul>
+</body>
+</html>
