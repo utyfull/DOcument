@@ -1,16 +1,76 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>User Files</title>
+    <title>Your Files</title>
+    <link href="{% static 'django_select2/css/select2.css' %}" rel="stylesheet" />
+    <script src="{% static 'jquery/js/jquery.min.js' %}"></script> <!-- Убедитесь, что jQuery подключен -->
+    <script src="{% static 'django_select2/js/select2.full.js' %}"></script>
 </head>
 <body>
-    <h1>User Files</h1>
+    <h1>Your Files</h1>
+
+    <!-- Отображение сообщений -->
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <!-- Форма для загрузки новых файлов -->
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Upload File</button>
+    </form>
+    <!-- Список файлов с возможностью скачивания -->
     <ul>
-        {% for file in file_contents %}
-            <li>{{ file.name }}</li>
-            <pre>{{ file.content }}</pre>
+        {% for file in user_files %}
+            <li>
+                <a href="{% url 'users:download' file.id %}">
+                    {{ file.name }} от {{ file.user.username }}
+                </a>
+                <!-- Вывод списка пользователей, с которыми поделен файл -->
+                Поделён с:
+                {% with shared_users=file.shared_with_entries.all %}
+                    {% if shared_users %}
+                        {% for shared_entry in shared_users %}
+                            {{ shared_entry.user.username }}{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        Никто
+                    {% endif %}
+                {% endwith %}
+            </li>
+        {% empty %}
+            <li>Файлы не найдены.</li>
         {% endfor %}
     </ul>
+
+
+    <ul>
+        {% for file in user_files %}
+            <li>
+                {{ file.name }}
+                <!-- ... ссылка на скачивание и другая информация о файле ... -->
+                
+                <!-- Форма для удаления файла -->
+                <form action="{% url 'users:delete_file' file.id %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit">Удалить файл</button>
+                </form>
+            </li>
+        {% empty %}
+            <li>Файлы не найдены.</li>
+        {% endfor %}
+    </ul>
+    <script>
+        $(document).ready(function() {
+            $('.django-select2').djangoSelect2();
+        });
+    </script>
 </body>
 </html>

@@ -2,6 +2,8 @@ from django import forms
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from .models import UserFile
 from users.models import User
+from django.contrib.auth import get_user_model
+from django_select2.forms import Select2MultipleWidget
 
 
 class UserLoginForm(AuthenticationForm):
@@ -28,7 +30,29 @@ class UserRegistrationForm(UserCreationForm):
         model = User
         fields = ('username', 'password1', 'password2')
 
-class FileUploadForm(forms.ModelForm):
+
+
+
+
+
+UserModel = get_user_model()
+
+class UserFileForm(forms.ModelForm):
+    shared_users = forms.ModelMultipleChoiceField(
+        queryset=UserModel.objects.none(),  # Изначально устанавливаем пустой queryset
+        required=False,
+        widget=Select2MultipleWidget
+    )
+
     class Meta:
         model = UserFile
-        fields = ['name', 'file']
+        fields = ['file', 'shared_users']
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)  # Извлекаем пользователя из kwargs
+        super(UserFileForm, self).__init__(*args, **kwargs)  # Не забываем вызвать метод super
+        
+        if user is not None:
+            # Теперь устанавливаем queryset для поля shared_users, исключив текущего пользователя
+            self.fields['shared_users'].queryset = UserModel.objects.exclude(id=user.id)
+
