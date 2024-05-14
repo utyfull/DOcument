@@ -30,7 +30,7 @@
     <ul>
         {% for file in user_files %}
             <li>
-                <a href="{% url 'users:download' file.id %}">
+                <a href="{% url 'users:view_file' file_id=file.id %}">{{ file.name }}</a>
                     {{ file.name }} от {{ file.user.username }}
                 </a>
                 <!-- Вывод списка пользователей, с которыми поделен файл -->

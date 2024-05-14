@@ -74,14 +74,18 @@ def user_files(request):
     return render(request, 'users/user_files.html', {'form': form, 'user_files': user_files_queryset})
 
 
+def view_file(request, file_id):
+    user_file = get_object_or_404(UserFile, id=file_id, user=request.user)
+    return render(request, 'users/view_file.html', {'user_file': user_file})
 
-def download(request, file_id):
+
+#def download(request, file_id):
     # Проверяем, есть ли у пользователя права на скачивание файла
-    user_file = get_object_or_404(UserFile, Q(id=file_id) & (Q(user=request.user) | Q(shared_with_entries__user=request.user)))
+    #user_file = get_object_or_404(UserFile, Q(id=file_id) & (Q(user=request.user) | Q(shared_with_entries__user=request.user)))
 
-    response = FileResponse(user_file.file)
-    response['Content-Disposition'] = f'attachment; filename="{user_file.name}"'
-    return response
+    #response = FileResponse(user_file.file)
+    #response['Content-Disposition'] = f'attachment; filename="{user_file.name}"'
+    #return response
 
 from django.urls import reverse
 

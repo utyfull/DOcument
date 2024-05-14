@@ -1,0 +1,82 @@
+#include <stdlib.h>
+
+#include <stdio.h>
+#include <math.h>
+
+#define C1X0 10
+#define C1Y0 10
+#define C1RAD 5
+
+#define C2X0 10
+#define C2Y0 10
+#define C2RAD 10
+
+#define I0 1
+#define J0 -30
+#define L0 1
+
+int mod(int a, int b)
+{  
+   int ret = a % b;
+   if(ret < 0)
+     ret+=b;
+   return ret;
+}
+
+int max(int x, int y){
+    return (x > y) ? x : y;
+}
+
+int min(int x, int y){
+    return (x < y) ? x : y;
+}
+
+int sign(int x){
+    return (x > 0) - (x < 0);
+}
+
+int in_circle(double x, double y, double x0, double y0, double radius){
+  return (x - x0) * (x - x0) + (y - y0) * (y - y0) <= radius * radius;
+}
+
+int in_area(int x, int y){
+  return (!(in_circle(x, y, C1X0, C1Y0, C1RAD))) && in_circle(x, y, C2X0, C2Y0, C2RAD);
+}
+
+int compute_i(int i, int j, int l, int k){
+  return max(min(i + j - l - k, i - j + l - k), min(k + i - j - l, k - i - j + l));
+}
+
+int compute_j(int i, int j, int l, int k){
+  return j + mod((l * sign(j)), 20) + mod((k * sign(i)), 10);
+}
+
+int compute_l(int i, int j, int l, int k){
+  return abs(i - j + l - k) * sign(i) * sign(j);
+}
+
+
+int main(void){
+    int k;
+
+    int i_old = I0;
+    int j_old = J0;
+    int l_old = L0;
+    int i, j, l;
+
+    for(k = 1; !in_area(i, j) && k <= 50; ++k){
+        i = compute_i(i_old, j_old, l_old, k);
+        j = compute_j(i_old, j_old, l_old, k);
+        l = compute_l(i_old, j_old, l_old, k);
+
+        i_old = i;
+        j_old = j;
+        l_old = l;
+    }
+    printf("%sside\n", in_area(i, j) ? "In" : "Out");
+    printf("i = %d, j = %d\n", i, j);
+    printf("k = %d, l = %d\n", k, l);
+
+    return 0;
+}
+

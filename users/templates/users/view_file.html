@@ -1,0 +1,8 @@
+<!-- users/view_file.html -->
+{% extends 'users/base.html' %}
+
+{% block main %}
+  <h1>{{ user_file.name }}</h1>
+  <!-- Вместо использования iframe, вы можете предоставить прямую ссылку на файл -->
+  <a href="{{ user_file.file.url }}" target="_blank">Открыть файл</a>
+{% endblock %}
