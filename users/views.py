@@ -93,15 +93,12 @@ def delete_file(request, file_id):
     if request.method == 'POST':
         user_file = get_object_or_404(UserFile, id=file_id, user=request.user)
         user_file.file.delete()  # Удаление файла из файловой системы
-        user_file.delete()  # Удаление записи о файле из базы данных
+        user_file.delete()  # Удаление записи о файла из базы данных
         messages.success(request, 'Файл успешно удален.')
-        
-        # Обновляем список файлов пользователя после удаления
-        user_files = UserFile.objects.filter(user=request.user)
-        form = UserFileForm()
 
-        return render(request, 'users/user_files.html', {'form': form, 'user_files': user_files})
+        # Переадресация на страницу со списком файлов
+        return redirect('users:user_files')  # 'user_files' - это имя маршрута, который ведет к списку файлов
 
-    # Если мы здесь, значит был не POST-запрос, и мы просто перенаправляем на список файлов
-    return redirect('user_files')
+    # Если метод запроса не POST, перенаправляем на страницу со списком файлов
+    return redirect('users:user_files')
 

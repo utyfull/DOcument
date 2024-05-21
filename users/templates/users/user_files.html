@@ -56,6 +56,8 @@
             <li>
                 {{ file.name }}
                 <!-- ... ссылка на скачивание и другая информация о файле ... -->
+
+                <a href="{% url 'sign_document' file_id=file.id %}" class="btn-sign">Подписать файл</a>
                 
                 <!-- Форма для удаления файла -->
                 <form action="{% url 'users:delete_file' file.id %}" method="post">

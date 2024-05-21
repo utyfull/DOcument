@@ -130,3 +130,5 @@ DATA_FILE_ROOT = Path('data_file/')
 AUTH_USER_MODEL = 'users.User'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+
