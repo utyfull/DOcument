@@ -161,3 +161,7 @@ cython_debug/
 
 #cache django 
 .pyc/
+
+
+#cache
+__pycache__/
