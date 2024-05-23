@@ -1,4 +1,3 @@
-<!-- users/view_file.html -->
 {% extends 'users/base.html' %}
 
 {% block main %}
@@ -23,4 +22,17 @@
   {% for message in messages %}
     <p style="color: {% if message.tags %}{{ message.tags }}{% else %}blue{% endif %};">{{ message }}</p>
   {% endfor %}
+
+  <!-- Блок для отображения комментариев -->
+  <h2>Комментарии к файлу</h2>
+  <ul>
+    {% for comment in comments %}
+      <li>
+        <strong>{{ comment.user.username }}</strong> ({{ comment.created_at }}):<br>
+        {{ comment.text }}
+      </li>
+    {% empty %}
+      <li>Комментариев нет.</li>
+    {% endfor %}
+  </ul>
 {% endblock %}

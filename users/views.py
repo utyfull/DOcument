@@ -4,7 +4,7 @@ from django.urls import reverse
 from .models import UserFile
 from .forms import UserFileForm
 from users.models import User
-from users.forms import UserLoginForm, UserRegistrationForm
+from users.forms import UserLoginForm, UserRegistrationForm, CommentForm
 from django.http import FileResponse
 from django.shortcuts import get_object_or_404
 from .models import UserFile, SharedWith  # Убедитесь, что здесь импортирован SharedWith
@@ -75,11 +75,13 @@ def user_files(request):
     return render(request, 'users/user_files.html', {'form': form, 'user_files': user_files_queryset})
 
 
+
 @login_required
 def view_own_file(request, file_id):
     # Получаем объект файла для просмотра
     user_file = get_object_or_404(UserFile, id=file_id)
     pfx_form = PFXUploadForm()
+    comment_form = CommentForm()
 
     if request.method == 'POST':
         pfx_form = PFXUploadForm(request.POST, request.FILES)
@@ -101,9 +103,14 @@ def view_own_file(request, file_id):
             except Exception as e:
                 messages.error(request, 'Не удалось извлечь ключ из PFX файла.')
 
+    # Получаем комментарии для файла от всех пользователей
+    comments = user_file.comments.all()
+
     return render(request, 'users/view_file.html', {
         'user_file': user_file,
-        'pfx_form': pfx_form
+        'pfx_form': pfx_form,
+        'comment_form': comment_form,
+        'comments': comments,
     })
 
 
@@ -111,30 +118,46 @@ def view_foreign_file(request, file_id):
     # Получаем объект файла для просмотра
     user_file = get_object_or_404(UserFile, id=file_id, shared_with_entries__user=request.user)
     pfx_form = PFXUploadForm()
+    comment_form = CommentForm()
 
     if request.method == 'POST':
-        pfx_form = PFXUploadForm(request.POST, request.FILES)
-        if pfx_form.is_valid():
-            try:
-                pfx_file = request.FILES['pfx_file']
-                pfx = crypto.load_pkcs12(pfx_file.read())
-                signer = pfx.get_privatekey()
+        if 'pfx_file' in request.FILES:
+            pfx_form = PFXUploadForm(request.POST, request.FILES)
+            if pfx_form.is_valid():
+                try:
+                    pfx_file = request.FILES['pfx_file']
+                    pfx = crypto.load_pkcs12(pfx_file.read())
+                    signer = pfx.get_privatekey()
 
-                # Подписываем файл
-                sign = crypto.sign(signer, user_file.content, 'sha256')
+                    # Подписываем файл
+                    sign = crypto.sign(signer, user_file.content, 'sha256')
 
-                # Сохраняем подписанный файл (нужно реализовать функцию save_signed_file)
-                signed_file_path = save_signed_file(user_file.content, sign)
+                    # Сохраняем подписанный файл (нужно реализовать функцию save_signed_file)
+                    signed_file_path = save_signed_file(user_file.content, sign)
 
-                messages.success(request, 'Файл успешно подписан.')
-                return redirect('signed_file_download', file_path=signed_file_path)
+                    messages.success(request, 'Файл успешно подписан.')
+                    return redirect('signed_file_download', file_path=signed_file_path)
 
-            except Exception as e:
-                messages.error(request, 'Не удалось извлечь ключ из PFX файла.')
+                except Exception as e:
+                    messages.error(request, 'Не удалось извлечь ключ из PFX файла.')
+
+        elif 'text' in request.POST:
+            comment_form = CommentForm(request.POST)
+            if comment_form.is_valid():
+                comment = comment_form.save(commit=False)
+                comment.user = request.user
+                comment.user_file = user_file
+                comment.save()
+                messages.success(request, 'Комментарий добавлен.')
+                return redirect('users:view_foreign_file', file_id=file_id)
+
+    comments = user_file.comments.filter(user=request.user)
 
     return render(request, 'users/shared_file_detail.html', {
         'user_file': user_file,
-        'pfx_form': pfx_form
+        'pfx_form': pfx_form,
+        'comment_form': comment_form,
+        'comments': comments,
     })
 
 

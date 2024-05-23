@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from .models import UserFile
-from users.models import User
+from users.models import User, Comment
 from django.contrib.auth import get_user_model
 from django_select2.forms import Select2MultipleWidget
 
@@ -59,3 +59,9 @@ class UserFileForm(forms.ModelForm):
 
 class PFXUploadForm(forms.Form):
     pfx_file = forms.FileField(label='Select your .pfx certificate')
+
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['text']
