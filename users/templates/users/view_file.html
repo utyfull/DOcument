@@ -1,14 +1,17 @@
+<!-- users/view_file.html -->
 {% extends 'users/base.html' %}
 
 {% block main %}
   <h1>{{ user_file.name }}</h1>
+  <!-- Предоставляем прямую ссылку на файл -->
   <a href="{{ user_file.file.url }}" target="_blank">Открыть файл</a>
 
+  <!-- Если есть сообщение об ошибке, показываем его здесь -->
   {% if error_message %}
     <p style="color: red;">{{ error_message }}</p>
   {% endif %}
 
-
+  <!-- Форма для подписания документа -->
   <h2>Подписать документ с помощью PFX файла</h2>
   <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
@@ -16,6 +19,7 @@
     <button type="submit">Подписать файл</button>
   </form>
 
+  <!-- Выводим сообщения Django -->
   {% for message in messages %}
     <p style="color: {% if message.tags %}{{ message.tags }}{% else %}blue{% endif %};">{{ message }}</p>
   {% endfor %}
@@ -30,9 +34,19 @@
     {% empty %}
       <li>Комментариев нет.</li>
     {% endfor %}
+<<<<<<< HEAD
   </ul=>
 
   {% comment %} <a href="{% url 'users:view_own_file' file.pk %}"> Edit </a> {% endcomment %}
 {% endblock %}
+=======
+  </ul>
 
-
+  <h2>Добавить комментарий</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ comment_form.as_p }}
+    <button type="submit">Добавить комментарий</button>
+  </form>
+{% endblock %}
+>>>>>>> 594e46074a42bbc131ecaf9273dee5721176b30e
