@@ -27,45 +27,61 @@
         <button type="submit">Upload File</button>
     </form>
 
-    <!-- Список файлов с возможностью скачивания -->
+    <!-- Список собственных файлов с возможностью скачивания и удаления -->
+    <h2>Ваши файлы</h2>
     <ul>
         {% for file in user_files %}
-            <li>
-                {% if file.user == request.user %}
+            {% if file.user == request.user %}
+                <li>
                     <a href="{% url 'users:view_own_file' file.pk %}">{{ file.name }}</a>
-                {% else %}
-                    <a href="{% url 'users:view_foreign_file' file.pk %}">{{ file.name }}</a>
-                {% endif %}
-                {{ file.name }} от {{ file.user.username }}
+                    от {{ file.user.username }}
 
-                <!-- Вывод списка пользователей, с которыми поделен файл -->
-                Поделён с:
-                {% with shared_users=file.shared_with_entries.all %}
-                    {% if shared_users %}
-                        {% for shared_entry in shared_users %}
-                            {{ shared_entry.user.username }}{% if not forloop.last %}, {% endif %}
-                        {% endfor %}
-                    {% else %}
-                        Никто
-                    {% endif %}
-                {% endwith %}
-            </li>
+                    <!-- Вывод списка пользователей, с которыми поделен файл -->
+                    Поделён с:
+                    {% with shared_users=file.shared_with_entries.all %}
+                        {% if shared_users %}
+                            {% for shared_entry in shared_users %}
+                                {{ shared_entry.user.username }}{% if not forloop.last %}, {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            Никто
+                        {% endif %}
+                    {% endwith %}
+
+                    <!-- Форма для удаления файла -->
+                    <form action="{% url 'users:delete_file' file.id %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit">Удалить файл</button>
+                    </form>
+                </li>
+            {% endif %}
         {% empty %}
             <li>Файлы не найдены.</li>
         {% endfor %}
     </ul>
 
-    <!-- Список файлов с возможностью удаления -->
+    <!-- Список файлов других пользователей с возможностью скачивания -->
+    <h2>Файлы других пользователей</h2>
     <ul>
         {% for file in user_files %}
-            <li>
-                {{ file.name }}
-                <!-- Форма для удаления файла -->
-                <form action="{% url 'users:delete_file' file.id %}" method="post">
-                    {% csrf_token %}
-                    <button type="submit">Удалить файл</button>
-                </form>
-            </li>
+            {% if file.user != request.user %}
+                <li>
+                    <a href="{% url 'users:view_foreign_file' file.pk %}">{{ file.name }}</a>
+                    от {{ file.user.username }}
+
+                    <!-- Вывод списка пользователей, с которыми поделен файл -->
+                    Поделён с:
+                    {% with shared_users=file.shared_with_entries.all %}
+                        {% if shared_users %}
+                            {% for shared_entry in shared_users %}
+                                {{ shared_entry.user.username }}{% if not forloop.last %}, {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            Никто
+                        {% endif %}
+                    {% endwith %}
+                </li>
+            {% endif %}
         {% empty %}
             <li>Файлы не найдены.</li>
         {% endfor %}
