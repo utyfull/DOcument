@@ -131,6 +131,14 @@ AUTH_USER_MODEL = 'users.User'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'sergmisha1@gmail.com'
+EMAIL_HOST_PASSWORD = 'jdiw kkgj oivo sptk'
+EMAIL_FROM_EMAIL = EMAIL_HOST_USER
+
 # some_view.py
 from django.conf import settings
 from cryptography.hazmat.primitives.serialization import pkcs12
@@ -151,4 +159,6 @@ def use_pfx():
 
     # Теперь вы можете использовать private_key и certificate как вам нужно
     # Например, для подписания данных или установления безопасного соединения
+
+
 
