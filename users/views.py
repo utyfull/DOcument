@@ -76,7 +76,7 @@ def user_files(request):
 
 
 @login_required
-def view_file(request, file_id):
+def view_own_file(request, file_id):
     # Получаем объект файла для просмотра
     user_file = get_object_or_404(UserFile, id=file_id)
     pfx_form = PFXUploadForm()
@@ -106,6 +106,36 @@ def view_file(request, file_id):
         'pfx_form': pfx_form
     })
 
+
+def view_foreign_file(request, file_id):
+    # Получаем объект файла для просмотра
+    user_file = get_object_or_404(UserFile, id=file_id)
+    pfx_form = PFXUploadForm()
+
+    if request.method == 'POST':
+        pfx_form = PFXUploadForm(request.POST, request.FILES)
+        if pfx_form.is_valid():
+            try:
+                pfx_file = request.FILES['pfx_file']
+                pfx = crypto.load_pkcs12(pfx_file.read())
+                signer = pfx.get_privatekey()
+
+                # Подписываем файл
+                sign = crypto.sign(signer, user_file.content, 'sha256')
+
+                # Сохраняем подписанный файл (нужно реализовать функцию save_signed_file)
+                signed_file_path = save_signed_file(user_file.content, sign)
+
+                messages.success(request, 'Файл успешно подписан.')
+                return redirect('signed_file_download', file_path=signed_file_path)
+
+            except Exception as e:
+                messages.error(request, 'Не удалось извлечь ключ из PFX файла.')
+
+    return render(request, 'users/view_file.html', {
+        'user_file': user_file,
+        'pfx_form': pfx_form
+    })
 
 
 #def download(request, file_id):

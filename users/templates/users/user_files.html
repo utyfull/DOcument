@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <title>Your Files</title>
     <link href="{% static 'django_select2/css/select2.css' %}" rel="stylesheet" />
-    <script src="{% static 'jquery/js/jquery.min.js' %}"></script> <!-- Убедитесь, что jQuery подключен -->
+    <script src="{% static 'jquery/js/jquery.min.js' %}"></script>
     <script src="{% static 'django_select2/js/select2.full.js' %}"></script>
 </head>
 <body>
@@ -15,7 +15,7 @@
     {% if messages %}
         <ul class="messages">
             {% for message in messages %}
-                <li>{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
             {% endfor %}
         </ul>
     {% endif %}
@@ -26,13 +26,18 @@
         {{ form.as_p }}
         <button type="submit">Upload File</button>
     </form>
+
     <!-- Список файлов с возможностью скачивания -->
     <ul>
         {% for file in user_files %}
             <li>
-                <a href="{% url 'users:view_file' file_id=file.id %}">{{ file.name }}</a>
-                    {{ file.name }} от {{ file.user.username }}
-                </a>
+                {% if file.user == request.user %}
+                    <a href="{% url 'users:view_own_file' file.pk %}">{{ file.name }}</a>
+                {% else %}
+                    <a href="{% url 'users:view_foreign_file' file.pk %}">{{ file.name }}</a>
+                {% endif %}
+                {{ file.name }} от {{ file.user.username }}
+
                 <!-- Вывод списка пользователей, с которыми поделен файл -->
                 Поделён с:
                 {% with shared_users=file.shared_with_entries.all %}
@@ -50,12 +55,11 @@
         {% endfor %}
     </ul>
 
-
+    <!-- Список файлов с возможностью удаления -->
     <ul>
         {% for file in user_files %}
             <li>
                 {{ file.name }}
-                <!-- ... ссылка на скачивание и другая информация о файле ... -->
                 <!-- Форма для удаления файла -->
                 <form action="{% url 'users:delete_file' file.id %}" method="post">
                     {% csrf_token %}
@@ -66,6 +70,7 @@
             <li>Файлы не найдены.</li>
         {% endfor %}
     </ul>
+
     <script>
         $(document).ready(function() {
             $('.django-select2').djangoSelect2();
