@@ -23,6 +23,6 @@ TestResults.xml
 #Python cache folder
 __pycache__/
 #python venv 
-.venv/
+venv/
 #doc file storage
 data_file/
