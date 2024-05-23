@@ -139,6 +139,12 @@ EMAIL_HOST_USER = 'sergmisha1@gmail.com'
 EMAIL_HOST_PASSWORD = 'jdiw kkgj oivo sptk'
 EMAIL_FROM_EMAIL = EMAIL_HOST_USER
 
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+
 # some_view.py
 from django.conf import settings
 from cryptography.hazmat.primitives.serialization import pkcs12
