@@ -11,12 +11,23 @@
   {% endif %}
 
   <!-- Форма для подписания документа -->
-  <h2>Подписать документ с помощью PFX файла</h2>
+  <h1>{{ user_file.name }}</h1>
+  <p>{{ user_file.content }}</p>
+
+  <h2>Подписать файл</h2>
   <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ pfx_form.as_p }}
     <button type="submit">Подписать файл</button>
   </form>
+
+  {% if messages %}
+    <ul class="messages">
+      {% for message in messages %}
+        <li>{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
 
   <!-- Выводим сообщения Django -->
   {% for message in messages %}

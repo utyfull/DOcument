@@ -10,6 +10,7 @@ class UserFile(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='user_files', on_delete=models.CASCADE)
     file = models.FileField(upload_to='user_files/')
     name = models.CharField(max_length=255)
+    content = models.TextField(blank=True, null=True)
     uploaded_at = models.DateTimeField(default=timezone.now)
     shared_with = models.ManyToManyField(settings.AUTH_USER_MODEL, through='SharedWith', related_name='shared_files')
 

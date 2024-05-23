@@ -58,7 +58,8 @@ class UserFileForm(forms.ModelForm):
 
 
 class PFXUploadForm(forms.Form):
-    pfx_file = forms.FileField(label='Select your .pfx certificate')
+    pfx_file = forms.FileField(label='Загрузите PFX файл')
+    password = forms.CharField(widget=forms.PasswordInput, label='Пароль для PFX файла', required=True)
 
 
 class CommentForm(forms.ModelForm):

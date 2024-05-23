@@ -1,3 +1,8 @@
+import base64
+
+from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives.asymmetric import padding
+from cryptography.hazmat.primitives.serialization import pkcs12
 from django.shortcuts import render, HttpResponseRedirect, redirect
 from django.contrib import auth, messages
 from django.urls import reverse
@@ -79,86 +84,94 @@ def user_files(request):
 @login_required
 def view_own_file(request, file_id):
     # Получаем объект файла для просмотра
-    user_file = get_object_or_404(UserFile, id=file_id)
+    # Получаем объект файла для просмотра
+    user_file = get_object_or_404(UserFile, id=file_id, shared_with_entries__user=request.user)
     pfx_form = PFXUploadForm()
-    comment_form = CommentForm()
 
     if request.method == 'POST':
         pfx_form = PFXUploadForm(request.POST, request.FILES)
         if pfx_form.is_valid():
             try:
                 pfx_file = request.FILES['pfx_file']
-                pfx = crypto.load_pkcs12(pfx_file.read())
-                signer = pfx.get_privatekey()
+                password = pfx_form.cleaned_data['password']
+                pfx_data = pfx_file.read()
+
+                # Загрузка PFX файла и извлечение ключа и сертификата
+                private_key, certificate, additional_certificates = pkcs12.load_key_and_certificates(
+                    pfx_data, password.encode()
+                )
 
                 # Подписываем файл
-                sign = crypto.sign(signer, user_file.content, 'sha256')
+                sign = private_key.sign(
+                    user_file.content.encode(),
+                    padding.PKCS1v15(),
+                    hashes.SHA256()
+                )
 
-                # Сохраняем подписанный файл (нужно реализовать функцию save_signed_file)
-                signed_file_path = save_signed_file(user_file.content, sign)
+                # Заменяем содержимое оригинального файла на подписанное
+                signed_content = user_file.content + '\n\nSignature:\n' + base64.b64encode(sign).decode()
+                user_file.content = signed_content
+                user_file.save()
 
                 messages.success(request, 'Файл успешно подписан.')
-                return redirect('signed_file_download', file_path=signed_file_path)
-
+                return redirect('users:view_foreign_file', file_id=user_file.id)  # Перенаправляем на страницу просмотра файла
             except Exception as e:
-                messages.error(request, 'Не удалось извлечь ключ из PFX файла.')
+                messages.error(request,
+                               f'Не удалось извлечь ключ из PFX файла. Проверьте правильность пароля. Ошибка: {e}')
 
-    # Получаем комментарии для файла от всех пользователей
-    comments = user_file.comments.all()
-
-    return render(request, 'users/view_file.html', {
+    return render(request, 'users/shared_file_detail.html', {
         'user_file': user_file,
-        'pfx_form': pfx_form,
-        'comment_form': comment_form,
-        'comments': comments,
+        'pfx_form': pfx_form
     })
 
 
+@login_required
 def view_foreign_file(request, file_id):
     # Получаем объект файла для просмотра
     user_file = get_object_or_404(UserFile, id=file_id, shared_with_entries__user=request.user)
     pfx_form = PFXUploadForm()
-    comment_form = CommentForm()
 
     if request.method == 'POST':
-        if 'pfx_file' in request.FILES:
-            pfx_form = PFXUploadForm(request.POST, request.FILES)
-            if pfx_form.is_valid():
-                try:
-                    pfx_file = request.FILES['pfx_file']
-                    pfx = crypto.load_pkcs12(pfx_file.read())
-                    signer = pfx.get_privatekey()
+        pfx_form = PFXUploadForm(request.POST, request.FILES)
+        if pfx_form.is_valid():
+            try:
+                pfx_file = request.FILES['pfx_file']
+                password = pfx_form.cleaned_data['password']
+                pfx_data = pfx_file.read()
 
-                    # Подписываем файл
-                    sign = crypto.sign(signer, user_file.content, 'sha256')
+                # Загрузка PFX файла и извлечение ключа и сертификата
+                private_key, certificate, additional_certificates = pkcs12.load_key_and_certificates(
+                    pfx_data, password.encode()
+                )
 
-                    # Сохраняем подписанный файл (нужно реализовать функцию save_signed_file)
-                    signed_file_path = save_signed_file(user_file.content, sign)
+                # Чтение содержимого файла, если оно пустое, устанавливаем значение по умолчанию
+                file_content = user_file.content or ""
+                file_content_bytes = file_content.encode()  # Преобразуем текстовое содержимое в байты
 
-                    messages.success(request, 'Файл успешно подписан.')
-                    return redirect('signed_file_download', file_path=signed_file_path)
+                # Подписываем файл
+                sign = private_key.sign(
+                    file_content_bytes,
+                    padding.PKCS1v15(),
+                    hashes.SHA256()
+                )
 
-                except Exception as e:
-                    messages.error(request, 'Не удалось извлечь ключ из PFX файла.')
+                # Создание подписанного содержимого
+                signed_content = file_content_bytes + b'\n\nSignature:\n' + base64.b64encode(sign)
 
-        elif 'text' in request.POST:
-            comment_form = CommentForm(request.POST)
-            if comment_form.is_valid():
-                comment = comment_form.save(commit=False)
-                comment.user = request.user
-                comment.user_file = user_file
-                comment.save()
-                messages.success(request, 'Комментарий добавлен.')
-                return redirect('users:view_foreign_file', file_id=file_id)
+                # Сохранение подписанного содержимого
+                user_file.content = signed_content.decode()  # Преобразуем байты обратно в текст
+                user_file.save()
 
-    comments = user_file.comments.filter(user=request.user)
+                messages.success(request, 'Файл успешно подписан.')
+                return redirect('users:view_foreign_file', file_id=user_file.id)  # Перенаправляем на страницу просмотра файла
+            except Exception as e:
+                messages.error(request, f'Не удалось извлечь ключ из PFX файла. Проверьте правильность пароля. Ошибка: {e}')
 
     return render(request, 'users/shared_file_detail.html', {
         'user_file': user_file,
-        'pfx_form': pfx_form,
-        'comment_form': comment_form,
-        'comments': comments,
+        'pfx_form': pfx_form
     })
+
 
 
 
@@ -185,33 +198,3 @@ def delete_file(request, file_id):
     # Если метод запроса не POST, перенаправляем на страницу со списком файлов
     return redirect('users:user_files')
 
-
-def handle_pfx_file(f, file_to_sign_path):
-    # Здесь была бы логика подписания файла.
-    pass
-
-
-def sign_file(request, file_id):
-    file_to_sign = get_file_by_id(file_id)
-
-    if request.method == 'POST':
-        form = PFXUploadForm(request.POST, request.FILES)
-        if form.is_valid():
-            try:
-                pfx_file = request.FILES['pfx_file']
-                pfx = crypto.load_pkcs12(pfx_file.read(), passphrase=b'')
-                signer = pfx.get_privatekey()
-                certificate = pfx.get_certificate()
-
-                sign = crypto.sign(signer, file_to_sign, 'sha256')
-
-                save_signed_file(file_to_sign, sign, certificate)
-
-                # Перенаправляем пользователя на страницу с подписанным файлом
-                return redirect('signed_file_page', file_id=file_id)
-            except Exception as e:
-                error_message = str(e)
-    else:
-        form = PFXUploadForm()
-
-    return render(request, 'sign_file.html', {'form': form, 'error_message': error_message})
