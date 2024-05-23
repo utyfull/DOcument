@@ -138,8 +138,7 @@ def handle_pfx_file(f, file_to_sign_path):
 
 
 def sign_file(request, file_id):
-    # Предполагается, что file_id используется для идентификации файла, который нужно подписать
-    file_to_sign = get_file_by_id(file_id)  # Функция для получения файла по ID (нужно реализовать)
+    file_to_sign = get_file_by_id(file_id)
 
     if request.method == 'POST':
         form = PFXUploadForm(request.POST, request.FILES)
@@ -150,16 +149,13 @@ def sign_file(request, file_id):
                 signer = pfx.get_privatekey()
                 certificate = pfx.get_certificate()
 
-                # Подписываем файл
                 sign = crypto.sign(signer, file_to_sign, 'sha256')
 
-                # Сохраняем подписанный файл (нужно реализовать)
                 save_signed_file(file_to_sign, sign, certificate)
 
                 # Перенаправляем пользователя на страницу с подписанным файлом
                 return redirect('signed_file_page', file_id=file_id)
             except Exception as e:
-                # В случае ошибки показываем сообщение
                 error_message = str(e)
     else:
         form = PFXUploadForm()
