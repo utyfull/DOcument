@@ -9,8 +9,9 @@ from django.http import FileResponse
 from django.shortcuts import get_object_or_404
 from .models import UserFile, SharedWith  # Убедитесь, что здесь импортирован SharedWith
 from django.db.models import Q
-
-
+from django.contrib.auth.decorators import login_required
+from .forms import PFXUploadForm
+from OpenSSL import crypto
 
 
 def autorization(request):
@@ -74,9 +75,37 @@ def user_files(request):
     return render(request, 'users/user_files.html', {'form': form, 'user_files': user_files_queryset})
 
 
+@login_required
 def view_file(request, file_id):
-    user_file = get_object_or_404(UserFile, id=file_id, user=request.user)
-    return render(request, 'users/view_file.html', {'user_file': user_file})
+    # Получаем объект файла для просмотра
+    user_file = get_object_or_404(UserFile, id=file_id)
+    pfx_form = PFXUploadForm()
+
+    if request.method == 'POST':
+        pfx_form = PFXUploadForm(request.POST, request.FILES)
+        if pfx_form.is_valid():
+            try:
+                pfx_file = request.FILES['pfx_file']
+                pfx = crypto.load_pkcs12(pfx_file.read())
+                signer = pfx.get_privatekey()
+
+                # Подписываем файл
+                sign = crypto.sign(signer, user_file.content, 'sha256')
+
+                # Сохраняем подписанный файл (нужно реализовать функцию save_signed_file)
+                signed_file_path = save_signed_file(user_file.content, sign)
+
+                messages.success(request, 'Файл успешно подписан.')
+                return redirect('signed_file_download', file_path=signed_file_path)
+
+            except Exception as e:
+                messages.error(request, 'Не удалось извлечь ключ из PFX файла.')
+
+    return render(request, 'users/view_file.html', {
+        'user_file': user_file,
+        'pfx_form': pfx_form
+    })
+
 
 
 #def download(request, file_id):
@@ -102,3 +131,37 @@ def delete_file(request, file_id):
     # Если метод запроса не POST, перенаправляем на страницу со списком файлов
     return redirect('users:user_files')
 
+
+def handle_pfx_file(f, file_to_sign_path):
+    # Здесь была бы логика подписания файла.
+    pass
+
+
+def sign_file(request, file_id):
+    # Предполагается, что file_id используется для идентификации файла, который нужно подписать
+    file_to_sign = get_file_by_id(file_id)  # Функция для получения файла по ID (нужно реализовать)
+
+    if request.method == 'POST':
+        form = PFXUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            try:
+                pfx_file = request.FILES['pfx_file']
+                pfx = crypto.load_pkcs12(pfx_file.read(), passphrase=b'')
+                signer = pfx.get_privatekey()
+                certificate = pfx.get_certificate()
+
+                # Подписываем файл
+                sign = crypto.sign(signer, file_to_sign, 'sha256')
+
+                # Сохраняем подписанный файл (нужно реализовать)
+                save_signed_file(file_to_sign, sign, certificate)
+
+                # Перенаправляем пользователя на страницу с подписанным файлом
+                return redirect('signed_file_page', file_id=file_id)
+            except Exception as e:
+                # В случае ошибки показываем сообщение
+                error_message = str(e)
+    else:
+        form = PFXUploadForm()
+
+    return render(request, 'sign_file.html', {'form': form, 'error_message': error_message})

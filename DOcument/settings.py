@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'home',
     'users',
+    'doc_sign',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -131,4 +132,24 @@ AUTH_USER_MODEL = 'users.User'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
+# some_view.py
+from django.conf import settings
+from cryptography.hazmat.primitives.serialization import pkcs12
+from cryptography.hazmat.primitives.serialization import load_pem_private_key
+from cryptography.hazmat.primitives import serialization
+from cryptography.hazmat.backends import default_backend
+
+def use_pfx():
+    pfx_path = settings.PFX_FILE_PATH
+    pfx_password = b'my_pfx_password'  # Пароль должен быть безопасно храниться, например, в переменных окружения
+
+    # Загрузка и использование файла PFX
+    with open(pfx_path, 'rb') as f:
+        pfx_data = f.read()
+    private_key, certificate, additional_certificates = pkcs12.load_key_and_certificates(
+        pfx_data, pfx_password, default_backend()
+    )
+
+    # Теперь вы можете использовать private_key и certificate как вам нужно
+    # Например, для подписания данных или установления безопасного соединения
 

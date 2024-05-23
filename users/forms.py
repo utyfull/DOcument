@@ -56,3 +56,6 @@ class UserFileForm(forms.ModelForm):
             # Теперь устанавливаем queryset для поля shared_users, исключив текущего пользователя
             self.fields['shared_users'].queryset = UserModel.objects.exclude(id=user.id)
 
+
+class PFXUploadForm(forms.Form):
+    pfx_file = forms.FileField(label='Select your .pfx certificate')

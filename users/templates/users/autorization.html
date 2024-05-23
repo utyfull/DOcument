@@ -1,40 +1,40 @@
-{% extends 'users/base.html'%}
+{% extends 'users/base.html' %}
 
 {% block main %}
     {% if messages or form.non_field_errors %}
-        <div class="alert alert-warning alert-dismissible fade show" role ="alert"
-            style="margin -top: 50x">
+        <div class="alert alert-warning alert-dismissible fade show" role="alert" style="margin-top: 50px;">
             {% if messages %}
-                {for message in messages%}
+                {% for message in messages %}
                     {{ message }}
+                {% endfor %}
             {% else %}
                 {{ form.non_field_errors }}
             {% endif %}
-            <strong>ERROR</strong>Somethihg wrong
-            <button type="button" class="close" data-dismiss="alert" arie-lebel="Close">
+            <strong>ERROR:</strong> Something went wrong.
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
     {% endif %}
-<h1>Login</h1>
-<form action="{% url 'users:autorization' %}" method="post">
-    {% csrf_token %}
-<div class="input-box">
-    {{ form.username }}
-    <i class="bx bxs-user-circle"></i>
-</div>
-<div class="input-box">
-    {{ form.password}}
-    <i class="bx bxs-lock"></i>
-</div>
-<button type="submit" class="btn">Log in</button>
+    <h1>Login</h1>
+    <form action="{% url 'users:autorization' %}" method="post">
+        {% csrf_token %}
+        <div class="input-box">
+            {{ form.username.label_tag }} {{ form.username }}
+            <i class="bx bxs-user-circle"></i>
+        </div>
+        <div class="input-box">
+            {{ form.password.label_tag }} {{ form.password }}
+            <i class="bx bxs-lock"></i>
+        </div>
+        <button type="submit" class="btn">Log in</button>
 
-<div class="registration">
-    <p>
-        don't have an account?
-        <a href="{% url 'users:registration' %}">registration</a>
-        <!вставляется ссылка на страницу на авторизацию>
-    </p>
-</div>
-</form>
+        <div class="registration">
+            <p>
+                Don't have an account?
+                <a href="{% url 'users:registration' %}">Register here</a>
+                <!-- Вставляется ссылка на страницу регистрации -->
+            </p>
+        </div>
+    </form>
 {% endblock %}
