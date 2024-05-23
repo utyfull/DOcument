@@ -109,7 +109,7 @@ def view_own_file(request, file_id):
 
 def view_foreign_file(request, file_id):
     # Получаем объект файла для просмотра
-    user_file = get_object_or_404(UserFile, id=file_id)
+    user_file = get_object_or_404(UserFile, id=file_id, shared_with_entries__user=request.user)
     pfx_form = PFXUploadForm()
 
     if request.method == 'POST':
@@ -132,10 +132,11 @@ def view_foreign_file(request, file_id):
             except Exception as e:
                 messages.error(request, 'Не удалось извлечь ключ из PFX файла.')
 
-    return render(request, 'users/view_file.html', {
+    return render(request, 'users/shared_file_detail.html', {
         'user_file': user_file,
         'pfx_form': pfx_form
     })
+
 
 
 #def download(request, file_id):
