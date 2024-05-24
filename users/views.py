@@ -210,7 +210,7 @@ def delete_file(request, file_id):
     if request.method == 'POST':
         user_file = get_object_or_404(UserFile, id=file_id, user=request.user)
         user_file.file.delete()  # Удаление файла из файловой системы
-        user_file.delete()  # Удаление записи о файла из базы данных
+        user_file.delete()  # Удаление записи о файле из базы данных
         messages.success(request, 'Файл успешно удален.')
 
         # Переадресация на страницу со списком файлов

@@ -31,7 +31,7 @@
     {% if messages %}
         <ul class="messages">
             {% for message in messages %}
-                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                <li>{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
             {% endfor %}
         </ul>
     {% endif %}
@@ -46,13 +46,20 @@
     <!-- Список собственных файлов с возможностью скачивания и удаления -->
     <h2>Ваши файлы</h2>
     <form id="filter1" method="get">
-        {{first_filter.form.as_p}}
+        {{ first_filter.form.as_p }}
     </form>
-    
+
     <ul>
         {% for file in second_filter.qs %}
             {% if file.user == request.user %}
-                <li> <a href="{% url 'users:view_own_file' file.pk %}">{{ file.name }}</a> (Published: {{ file.uploaded_at|date:"Y-m-d H:i:s"}})</li>
+                <li>
+                    <a href="{% url 'users:view_own_file' file.pk %}">{{ file.name }}</a> (Published: {{ file.uploaded_at|date:"Y-m-d H:i:s"}})
+                    <!-- Форма для удаления файла -->
+                    <form method="post" action="{% url 'users:delete_file' file.pk %}" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" onclick="return confirm('Вы уверены, что хотите удалить этот файл?');">Удалить</button>
+                    </form>
+                </li>
             {% endif %}
         {% empty %}
             <li>No file found.</li>
@@ -62,12 +69,14 @@
     <!-- Список файлов других пользователей с возможностью скачивания -->
     <h2>Файлы других пользователей</h2>
     <form id="filter2" method="get">
-        {{second_filter.form.as_p}}
+        {{ second_filter.form.as_p }}
     </form>
     <ul>
         {% for file in second_filter.qs %}
             {% if file.user != request.user %}
-                <li> <a href="{% url 'users:view_foreign_file' file.pk %}">{{ file.name }}</a> From {{ file.user.username }} (Published: {{ file.uploaded_at|date:"Y-m-d H:i:s"}})</li>
+                <li>
+                    <a href="{% url 'users:view_foreign_file' file.pk %}">{{ file.name }}</a> From {{ file.user.username }} (Published: {{ file.uploaded_at|date:"Y-m-d H:i:s"}})
+                </li>
             {% endif %}
         {% empty %}
             <li>No file found.</li>
