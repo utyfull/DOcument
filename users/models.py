@@ -12,6 +12,7 @@ class UserFile(models.Model):
     name = models.CharField(max_length=255)
     content = models.TextField(blank=True, null=True)
     uploaded_at = models.DateTimeField(default=timezone.now)
+    signed_by = models.ForeignKey(User, related_name='signed_files', on_delete=models.SET_NULL, null=True, blank=True)
     shared_with = models.ManyToManyField(settings.AUTH_USER_MODEL, through='SharedWith', related_name='shared_files')
 
     def save(self, *args, **kwargs):
@@ -42,6 +43,12 @@ class Comment(models.Model):
 
     def __str__(self):
         return f"Comment by {self.user} on {self.user_file}"
+
+class FileSignature(models.Model):
+    objects = None
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user_file = models.ForeignKey(UserFile, related_name='signatures', on_delete=models.CASCADE)
+    signed_at = models.DateTimeField(auto_now_add=True)
     
 
 

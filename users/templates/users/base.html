@@ -4,15 +4,56 @@
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Form login and password</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="style.css"/>
-    <link
-            href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
-            rel="stylesheet"
-    />
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet"/>
+    <style>
+        /* Общие стили */
+        body, html {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Стили для общего контейнера */
+        .wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* Стили для карточки с содержимым */
+        .card {
+            width: 100%;
+            max-width: 1000px; /* Увеличиваем максимальную ширину карточки */
+            padding: 30px; /* Добавляем отступы */
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            background-color: #ffffff; /* Цвет фона */
+        }
+
+        /* Стили для формы */
+        form {
+            margin-top: 20px;
+        }
+
+        /* Стили для кнопки */
+        .btn-primary {
+            margin-top: 20px;
+        }
+
+        /* Стили для сообщений об ошибках */
+        .alert {
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
-<div class="wraaper">
-        {%block main%}{%endblock%}
+<div class="wrapper">
+    <div class="card">
+        {% block main %}{% endblock %}
+    </div>
 </div>
 </body>
 </html>
