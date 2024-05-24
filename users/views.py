@@ -17,6 +17,7 @@ from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from .forms import PFXUploadForm
 from OpenSSL import crypto
+from .tasks import send_custom_email
 
 
 def autorization(request):
@@ -43,6 +44,7 @@ def registration(request):
         if form.is_valid():
             form.save()
             messages.success(request, 'Congratulations, now you are with us!')
+            send_custom_email("Registration", f"Now you are with us! <DOcument>", [form.cleaned_data['username']])
             return HttpResponseRedirect('/')
     else:
         form = UserRegistrationForm()
@@ -163,6 +165,10 @@ def view_foreign_file(request, file_id):
                 user_file.save()
 
                 messages.success(request, 'Файл успешно подписан.')
+
+                if request.user.is_authenticated:
+                    send_custom_email("Document sign", f"you sign document {user_file.name}", [request.user.username])
+                    send_custom_email("Document sign", f"User {request.user.username} have signed file {user_file.name}", [])
                 return redirect('users:view_foreign_file', file_id=user_file.id)  # Перенаправляем на страницу просмотра файла
             except Exception as e:
                 messages.error(request, f'Не удалось извлечь ключ из PFX файла. Проверьте правильность пароля. Ошибка: {e}')
