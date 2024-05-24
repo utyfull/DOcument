@@ -17,25 +17,32 @@
             </button>
         </div>
     {% endif %}
-    <form action="{% url 'users:autorization' %}" method="post">
-        {% csrf_token %}
-        <div class="input-box1">
-            <h1>Login</h1>
-            {{ form.username.label_tag }} {{ form.username }}
-            <i class="bx bxs-user-circle"></i>
+    <div class="container">
+        <div class="row justify-content-center mt-5">
+            <div class="col-md-12"> <!-- Увеличили ширину поля ввода -->
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="card-title text-center mb-4">Login</h2>
+                        <form action="{% url 'users:autorization' %}" method="post">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label for="id_username">Username</label>
+                                <input type="text" name="username" class="form-control" id="id_username">
+                                <i class="bx bxs-user-circle"></i>
+                            </div>
+                            <div class="form-group">
+                                <label for="id_password">Password</label>
+                                <input type="password" name="password" class="form-control" id="id_password">
+                                <i class="bx bxs-lock"></i>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block">Log in</button>
+                        </form>
+                        <div class="text-center mt-3">
+                            <p>Don't have an account? <a href="{% url 'users:registration' %}">Register here</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="input-box">
-            {{ form.password.label_tag }} {{ form.password }}
-            <i class="bx bxs-lock"></i>
-        </div>
-        <button type="submit" class="btn">Log in</button>
-
-        <div class="registration">
-            <p>
-                Don't have an account?
-                <a href="{% url 'users:registration' %}">Register here</a>
-                <!-- Вставляется ссылка на страницу регистрации -->
-            </p>
-        </div>
-    </form>
+    </div>
 {% endblock %}
