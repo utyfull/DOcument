@@ -4,9 +4,25 @@
 <head>
     <meta charset="UTF-8">
     <title>Your Files</title>
-    <link href="{% static 'django_select2/css/select2.css' %}" rel="stylesheet" />
-    <script src="{% static 'jquery/js/jquery.min.js' %}"></script>
-    <script src="{% static 'django_select2/js/select2.full.js' %}"></script>
+    <script>
+    function autoSubmitForm1() {
+        document.getElementById('filter1').submit();
+    }
+
+    function autoSubmitForm2() {
+        document.getElementById('filter2').submit();
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('#filter1 input, #filter1 select').forEach(function(element) {
+            element.addEventListener('change', autoSubmitForm1);
+        });
+
+        document.querySelectorAll('#filter2 input, #filter2 select').forEach(function(element) {
+            element.addEventListener('change', autoSubmitForm2);
+        });
+    });
+</script>
 </head>
 <body>
     <h1>Your Files</h1>
@@ -29,61 +45,32 @@
 
     <!-- Список собственных файлов с возможностью скачивания и удаления -->
     <h2>Ваши файлы</h2>
+    <form id="filter1" method="get">
+        {{first_filter.form.as_p}}
+    </form>
+    
     <ul>
-        {% for file in user_files %}
+        {% for file in second_filter.qs %}
             {% if file.user == request.user %}
-                <li>
-                    <a href="{% url 'users:view_own_file' file.pk %}">{{ file.name }}</a>
-                    от {{ file.user.username }}
-
-                    <!-- Вывод списка пользователей, с которыми поделен файл -->
-                    Поделён с:
-                    {% with shared_users=file.shared_with_entries.all %}
-                        {% if shared_users %}
-                            {% for shared_entry in shared_users %}
-                                {{ shared_entry.user.username }}{% if not forloop.last %}, {% endif %}
-                            {% endfor %}
-                        {% else %}
-                            Никто
-                        {% endif %}
-                    {% endwith %}
-
-                    <!-- Форма для удаления файла -->
-                    <form action="{% url 'users:delete_file' file.id %}" method="post">
-                        {% csrf_token %}
-                        <button type="submit">Удалить файл</button>
-                    </form>
-                </li>
+                <li> <a href="{% url 'users:view_own_file' file.pk %}">{{ file.name }}</a> (Published: {{ file.uploaded_at|date:"Y-m-d H:i:s"}})</li>
             {% endif %}
         {% empty %}
-            <li>Файлы не найдены.</li>
+            <li>No file found.</li>
         {% endfor %}
     </ul>
 
     <!-- Список файлов других пользователей с возможностью скачивания -->
     <h2>Файлы других пользователей</h2>
+    <form id="filter2" method="get">
+        {{second_filter.form.as_p}}
+    </form>
     <ul>
-        {% for file in user_files %}
+        {% for file in second_filter.qs %}
             {% if file.user != request.user %}
-                <li>
-                    <a href="{% url 'users:view_foreign_file' file.pk %}">{{ file.name }}</a>
-                    от {{ file.user.username }}
-
-                    <!-- Вывод списка пользователей, с которыми поделен файл -->
-                    Поделён с:
-                    {% with shared_users=file.shared_with_entries.all %}
-                        {% if shared_users %}
-                            {% for shared_entry in shared_users %}
-                                {{ shared_entry.user.username }}{% if not forloop.last %}, {% endif %}
-                            {% endfor %}
-                        {% else %}
-                            Никто
-                        {% endif %}
-                    {% endwith %}
-                </li>
+                <li> <a href="{% url 'users:view_own_file' file.pk %}">{{ file.name }}</a> From {{ file.user.username }} (Published: {{ file.uploaded_at|date:"Y-m-d H:i:s"}})</li>
             {% endif %}
         {% empty %}
-            <li>Файлы не найдены.</li>
+            <li>No file found.</li>
         {% endfor %}
     </ul>
 

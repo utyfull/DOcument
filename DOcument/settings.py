@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'catalog.apps.CatalogConfig',
     'django_select2',
+    'django_filters',
 ]
 
 MIDDLEWARE = [

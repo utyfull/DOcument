@@ -17,6 +17,7 @@ from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from .forms import PFXUploadForm
 from OpenSSL import crypto
+from .filters import fileFilter, foreign_fileFilter
 
 
 def autorization(request):
@@ -77,7 +78,10 @@ def user_files(request):
         Q(user=request.user) | Q(shared_with_entries__user=request.user)
     ).distinct()
 
-    return render(request, 'users/user_files.html', {'form': form, 'user_files': user_files_queryset})
+    filter_files = fileFilter(request.GET, prefix='first', queryset=user_files_queryset)
+    foreign_files_filter = foreign_fileFilter(request.GET, prefix='second', queryset=user_files_queryset)
+
+    return render(request, 'users/user_files.html', {'form': form, 'first_filter': filter_files, 'second_filter': foreign_files_filter})
 
 
 
