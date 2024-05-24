@@ -82,11 +82,11 @@ def user_files(request):
 
 
 @login_required
+#Камила,ничего не меняй(пока)
 def view_own_file(request, file_id):
-    # Получаем объект файла для просмотра
-    # Получаем объект файла для просмотра
-    user_file = get_object_or_404(UserFile, id=file_id, shared_with_entries__user=request.user)
+    user_file = get_object_or_404(UserFile, id=file_id)
     pfx_form = PFXUploadForm()
+    comment_form = CommentForm()
 
     if request.method == 'POST':
         pfx_form = PFXUploadForm(request.POST, request.FILES)
@@ -119,17 +119,22 @@ def view_own_file(request, file_id):
                 messages.error(request,
                                f'Не удалось извлечь ключ из PFX файла. Проверьте правильность пароля. Ошибка: {e}')
 
-    return render(request, 'users/shared_file_detail.html', {
+    comments = user_file.comments.all()
+
+    return render(request, 'users/view_file.html', {
         'user_file': user_file,
-        'pfx_form': pfx_form
+        'pfx_form': pfx_form,
+        'comment_form': comment_form,
+        'comments': comments,
     })
 
 
 @login_required
 def view_foreign_file(request, file_id):
     # Получаем объект файла для просмотра
-    user_file = get_object_or_404(UserFile, id=file_id, shared_with_entries__user=request.user)
+    user_file = get_object_or_404(UserFile, id=file_id)
     pfx_form = PFXUploadForm()
+    comment_form = CommentForm()
 
     if request.method == 'POST':
         pfx_form = PFXUploadForm(request.POST, request.FILES)
@@ -167,9 +172,13 @@ def view_foreign_file(request, file_id):
             except Exception as e:
                 messages.error(request, f'Не удалось извлечь ключ из PFX файла. Проверьте правильность пароля. Ошибка: {e}')
 
+    comments = user_file.comments.filter(user=request.user)
+
     return render(request, 'users/shared_file_detail.html', {
         'user_file': user_file,
-        'pfx_form': pfx_form
+        'pfx_form': pfx_form,
+        'comment_form': comment_form,
+        'comments': comments,
     })
 
 
