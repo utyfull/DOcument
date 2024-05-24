@@ -1,6 +1,7 @@
 {% extends 'users/base.html' %}
-
+{% load static %}
 {% block main %}
+    <link rel="stylesheet" href="{% static 'css/autorization.css'%}">
     {% if messages or form.non_field_errors %}
         <div class="alert alert-warning alert-dismissible fade show" role="alert" style="margin-top: 50px;">
             {% if messages %}
@@ -16,10 +17,10 @@
             </button>
         </div>
     {% endif %}
-    <h1>Login</h1>
     <form action="{% url 'users:autorization' %}" method="post">
         {% csrf_token %}
-        <div class="input-box">
+        <div class="input-box1">
+            <h1>Login</h1>
             {{ form.username.label_tag }} {{ form.username }}
             <i class="bx bxs-user-circle"></i>
         </div>

@@ -21,7 +21,6 @@ class UserFile(models.Model):
 
     def __str__(self):
         return self.name
-
     
 
 class SharedWith(models.Model):
@@ -33,16 +32,18 @@ class SharedWith(models.Model):
 
     def __str__(self):
         return f"{self.user_file} shared with {self.user}"
+
     
 class Comment(models.Model):
     user_file = models.ForeignKey(UserFile, related_name='comments', on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     text = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"Comment by {self.user} on {self.user_file}"
     
+
 
 
 
