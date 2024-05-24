@@ -9,17 +9,6 @@
   {% endif %}
 
 
-  <h2>Подписать документ с помощью PFX файла</h2>
-  <form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ pfx_form.as_p }}
-    <button type="submit">Подписать файл</button>
-  </form>
-
-  {% for message in messages %}
-    <p style="color: {% if message.tags %}{{ message.tags }}{% else %}blue{% endif %};">{{ message }}</p>
-  {% endfor %}
-
   <h2>Комментарии</h2>
   <ul>
     {% for comment in comments %}
@@ -30,12 +19,6 @@
     {% empty %}
       <li>Комментариев нет.</li>
     {% endfor %}
-<<<<<<< HEAD
-  </ul=>
-
-  {% comment %} <a href="{% url 'users:view_own_file' file.pk %}"> Edit </a> {% endcomment %}
-{% endblock %}
-=======
   </ul>
 
   <h2>Добавить комментарий</h2>
@@ -45,4 +28,3 @@
     <button type="submit">Добавить комментарий</button>
   </form>
 {% endblock %}
->>>>>>> 594e46074a42bbc131ecaf9273dee5721176b30e
