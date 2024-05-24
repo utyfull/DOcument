@@ -8,7 +8,7 @@ from django.contrib import auth, messages
 from django.urls import reverse
 from .models import UserFile
 from .forms import UserFileForm
-from users.models import User
+from users.models import User, FileSignature
 from users.forms import UserLoginForm, UserRegistrationForm, CommentForm
 from django.http import FileResponse
 from django.shortcuts import get_object_or_404
@@ -141,6 +141,10 @@ def view_foreign_file(request, file_id):
 
     if request.method == 'POST':
         if 'pfx_file' in request.FILES:
+            if FileSignature.objects.filter(user=request.user, user_file=user_file).exists():
+                messages.error(request, 'Вы уже подписали этот файл.')
+                return redirect('users:view_foreign_file', file_id=user_file.id)
+
             pfx_form = PFXUploadForm(request.POST, request.FILES)
             if pfx_form.is_valid():
                 try:
@@ -161,10 +165,8 @@ def view_foreign_file(request, file_id):
                         hashes.SHA256()
                     )
 
-                    signed_content = file_content_bytes + b'\n\nSignature:\n' + base64.b64encode(sign)
-
-                    user_file.content = signed_content.decode()
-                    user_file.save()
+                    # Сохраняем информацию о подписавшем пользователе
+                    FileSignature.objects.create(user=request.user, user_file=user_file)
 
                     messages.success(request, 'Файл успешно подписан.')
                     return redirect('users:view_foreign_file', file_id=user_file.id)
@@ -181,12 +183,16 @@ def view_foreign_file(request, file_id):
                 return redirect('users:view_foreign_file', file_id=user_file.id)
 
     comments = user_file.comments.all()
+    signatures = FileSignature.objects.filter(user_file=user_file)
+    users = User.objects.all()
 
     return render(request, 'users/shared_file_detail.html', {
         'user_file': user_file,
         'pfx_form': pfx_form,
         'comment_form': comment_form,
         'comments': comments,
+        'signatures': signatures,
+        'users': users,
     })
 
 
