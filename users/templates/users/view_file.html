@@ -30,19 +30,9 @@
     {% empty %}
       <li>Комментариев нет.</li>
     {% endfor %}
-<<<<<<< HEAD
   </ul=>
 
   {% comment %} <a href="{% url 'users:view_own_file' file.pk %}"> Edit </a> {% endcomment %}
 {% endblock %}
-=======
-  </ul>
 
-  <h2>Добавить комментарий</h2>
-  <form method="post">
-    {% csrf_token %}
-    {{ comment_form.as_p }}
-    <button type="submit">Добавить комментарий</button>
-  </form>
-{% endblock %}
->>>>>>> 594e46074a42bbc131ecaf9273dee5721176b30e
+
