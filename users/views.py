@@ -18,7 +18,7 @@ from django.contrib.auth.decorators import login_required
 from .forms import PFXUploadForm
 from OpenSSL import crypto
 from .filters import fileFilter, foreign_fileFilter
-
+from django.http import JsonResponse
 
 def autorization(request):
     if request.method == 'POST':
@@ -212,4 +212,17 @@ def delete_file(request, file_id):
 
     # Если метод запроса не POST, перенаправляем на страницу со списком файлов
     return redirect('users:user_files')
+
+@login_required
+def editor(request):
+    return render(request, 'editor.html')
+
+
+@login_required
+def save_document(request):
+    if request.method == 'POST' and request.is_ajax():
+        html_content = request.POST.get('html_content')
+
+        return JsonResponse({'status': 'success'})
+    return JsonResponse({'status': 'error', 'message': {'Invalid request'}})
 

@@ -45,5 +45,7 @@
     {% empty %}
       <li>Комментариев нет.</li>
     {% endfor %}
-  </ul>
+  </ul=>
+
+  {% comment %} <a href="{% url 'users:view_own_file' file.pk %}"> Edit </a> {% endcomment %}
 {% endblock %}
