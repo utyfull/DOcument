@@ -131,48 +131,52 @@ def view_own_file(request, file_id):
 
 @login_required
 def view_foreign_file(request, file_id):
-    # Получаем объект файла для просмотра
     user_file = get_object_or_404(UserFile, id=file_id)
     pfx_form = PFXUploadForm()
     comment_form = CommentForm()
 
     if request.method == 'POST':
-        pfx_form = PFXUploadForm(request.POST, request.FILES)
-        if pfx_form.is_valid():
-            try:
-                pfx_file = request.FILES['pfx_file']
-                password = pfx_form.cleaned_data['password']
-                pfx_data = pfx_file.read()
+        if 'pfx_file' in request.FILES:
+            pfx_form = PFXUploadForm(request.POST, request.FILES)
+            if pfx_form.is_valid():
+                try:
+                    pfx_file = request.FILES['pfx_file']
+                    password = pfx_form.cleaned_data['password']
+                    pfx_data = pfx_file.read()
 
-                # Загрузка PFX файла и извлечение ключа и сертификата
-                private_key, certificate, additional_certificates = pkcs12.load_key_and_certificates(
-                    pfx_data, password.encode()
-                )
+                    private_key, certificate, additional_certificates = pkcs12.load_key_and_certificates(
+                        pfx_data, password.encode()
+                    )
 
-                # Чтение содержимого файла, если оно пустое, устанавливаем значение по умолчанию
-                file_content = user_file.content or ""
-                file_content_bytes = file_content.encode()  # Преобразуем текстовое содержимое в байты
+                    file_content = user_file.content or ""
+                    file_content_bytes = file_content.encode()
 
-                # Подписываем файл
-                sign = private_key.sign(
-                    file_content_bytes,
-                    padding.PKCS1v15(),
-                    hashes.SHA256()
-                )
+                    sign = private_key.sign(
+                        file_content_bytes,
+                        padding.PKCS1v15(),
+                        hashes.SHA256()
+                    )
 
-                # Создание подписанного содержимого
-                signed_content = file_content_bytes + b'\n\nSignature:\n' + base64.b64encode(sign)
+                    signed_content = file_content_bytes + b'\n\nSignature:\n' + base64.b64encode(sign)
 
-                # Сохранение подписанного содержимого
-                user_file.content = signed_content.decode()  # Преобразуем байты обратно в текст
-                user_file.save()
+                    user_file.content = signed_content.decode()
+                    user_file.save()
 
-                messages.success(request, 'Файл успешно подписан.')
-                return redirect('users:view_foreign_file', file_id=user_file.id)  # Перенаправляем на страницу просмотра файла
-            except Exception as e:
-                messages.error(request, f'Не удалось извлечь ключ из PFX файла. Проверьте правильность пароля. Ошибка: {e}')
+                    messages.success(request, 'Файл успешно подписан.')
+                    return redirect('users:view_foreign_file', file_id=user_file.id)
+                except Exception as e:
+                    messages.error(request, f'Не удалось извлечь ключ из PFX файла. Проверьте правильность пароля. Ошибка: {e}')
+        else:
+            comment_form = CommentForm(request.POST)
+            if comment_form.is_valid():
+                comment = comment_form.save(commit=False)
+                comment.user = request.user
+                comment.user_file = user_file
+                comment.save()
+                messages.success(request, 'Комментарий добавлен.')
+                return redirect('users:view_foreign_file', file_id=user_file.id)
 
-    comments = user_file.comments.filter(user=request.user)
+    comments = user_file.comments.all()
 
     return render(request, 'users/shared_file_detail.html', {
         'user_file': user_file,
@@ -180,8 +184,6 @@ def view_foreign_file(request, file_id):
         'comment_form': comment_form,
         'comments': comments,
     })
-
-
 
 
 #def download(request, file_id):
