@@ -9,7 +9,6 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
-<<<<<<< HEAD
     
     function debounce(func, delay) {
         let timer;
@@ -22,14 +21,6 @@
             }, delay);
         };
     }
-
-    function autoSubmitForm1() {
-        document.getElementById('filter1').submit();
-    }
-=======
-    $(document).ready(function() {
-        $('#id_shared_users').select2();
->>>>>>> a17a0e0a59a6b3878a8a9d74409a56f86ae52f1d
 
         function autoSubmitForm1() {
             document.getElementById('filter1').submit();
@@ -46,12 +37,7 @@
         document.querySelectorAll('#filter2 input, #filter2 select').forEach(function(element) {
             element.addEventListener('change', debounce(autoSubmitForm2, 300));
         });
-    });
-<<<<<<< HEAD
 </script> 
-=======
-    </script>
->>>>>>> a17a0e0a59a6b3878a8a9d74409a56f86ae52f1d
 </head>
 <body>
     <div class="container">
