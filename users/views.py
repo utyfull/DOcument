@@ -19,6 +19,7 @@ from .forms import PFXUploadForm
 from OpenSSL import crypto
 from .filters import fileFilter, foreign_fileFilter
 from django.http import JsonResponse
+from .tasks import send_custom_email
 
 def autorization(request):
     if request.method == 'POST':
@@ -36,14 +37,13 @@ def autorization(request):
     return render(request, 'users/autorization.html', context)
 
 
-
-
 def registration(request):
     if request.method == 'POST':
         form = UserRegistrationForm(data=request.POST)
         if form.is_valid():
             form.save()
             messages.success(request, 'Congratulations, now you are with us!')
+            send_custom_email("Registration", "You registred in DOcument", [form.cleaned_data['username']])
             return HttpResponseRedirect('/')
     else:
         form = UserRegistrationForm()
@@ -178,6 +178,8 @@ def view_foreign_file(request, file_id):
                     FileSignature.objects.create(user=request.user, user_file=user_file)
 
                     messages.success(request, 'Файл успешно подписан.')
+                    send_custom_email("Sign DOcument", f"user {request.user.username} signed file {user_file.name}", [user_file.user.username])
+                    send_custom_email("Sign DOcument", f"You signed file {user_file.name}", [request.user.username])
                     return redirect('users:view_foreign_file', file_id=user_file.id)
                 except Exception as e:
                     messages.error(request, f'Не удалось извлечь ключ из PFX файла. Проверьте правильность пароля. Ошибка: {e}')
