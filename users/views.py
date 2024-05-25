@@ -52,6 +52,7 @@ def registration(request):
 
 
 
+@login_required
 def user_files(request):
     if request.method == 'POST':
         form = UserFileForm(request.POST, request.FILES, user=request.user)
@@ -62,7 +63,7 @@ def user_files(request):
 
             shared_users = form.cleaned_data['shared_users']
             for shared_user in shared_users:
-                SharedWith.objects.create(user_file=user_file, user=shared_user)
+                SharedWith.objects.get_or_create(user_file=user_file, user=shared_user)
 
             # Добавляем сообщение об успехе
             messages.success(request, 'Файл успешно загружен.')
@@ -70,10 +71,10 @@ def user_files(request):
             # Перенаправляем пользователя на другую страницу, например на главную страницу
             return redirect('/users/files')  # 'home' замените на имя URL-адреса, на который вы хотите перенаправить пользователя
 
-    # Если метод не POST (то есть GET), то отображаем пустую форму
     else:
         form = UserFileForm(user=request.user)
-  # Получаем список файлов пользователя и файлы, которыми с ним поделились
+
+    # Получаем список файлов пользователя и файлы, которыми с ним поделились
     user_files_queryset = UserFile.objects.filter(
         Q(user=request.user) | Q(shared_with_entries__user=request.user)
     ).distinct()
@@ -82,6 +83,14 @@ def user_files(request):
     foreign_files_filter = foreign_fileFilter(request.GET, prefix='second', queryset=user_files_queryset)
 
     return render(request, 'users/user_files.html', {'form': form, 'first_filter': filter_files, 'second_filter': foreign_files_filter})
+
+@login_required
+def remove_shared_user(request, file_id, user_id):
+    user_file = get_object_or_404(UserFile, id=file_id, user=request.user)
+    shared_user = get_object_or_404(User, id=user_id)
+    SharedWith.objects.filter(user_file=user_file, user=shared_user).delete()
+    messages.success(request, f'Пользователь {shared_user.username} был удален из списка доступа к файлу.')
+    return redirect('/users/files')
 
 
 

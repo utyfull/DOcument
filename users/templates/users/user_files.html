@@ -5,16 +5,21 @@
     <meta charset="UTF-8">
     <title>Your Files</title>
     <link rel="stylesheet" href="{% static 'css/user.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
-    function autoSubmitForm1() {
-        document.getElementById('filter1').submit();
-    }
+    $(document).ready(function() {
+        $('#id_shared_users').select2();
 
-    function autoSubmitForm2() {
-        document.getElementById('filter2').submit();
-    }
+        function autoSubmitForm1() {
+            document.getElementById('filter1').submit();
+        }
 
-    document.addEventListener('DOMContentLoaded', function() {
+        function autoSubmitForm2() {
+            document.getElementById('filter2').submit();
+        }
+
         document.querySelectorAll('#filter1 input, #filter1 select').forEach(function(element) {
             element.addEventListener('change', autoSubmitForm1);
         });
@@ -64,6 +69,15 @@
                             {% csrf_token %}
                             <button type="submit" class="btn-delete" onclick="return confirm('Вы уверены, что хотите удалить этот файл?');">Удалить</button>
                         </form>
+                        <!-- Список пользователей, с которыми поделились файлом -->
+                        <ul class="shared-users">
+                            {% for shared_user in file.shared_with_entries.all %}
+                                <li>
+                                    {{ shared_user.user.username }}
+                                    <a href="{% url 'users:remove_shared_user' file.pk shared_user.user.pk %}" class="btn-delete">Убрать</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
                     </li>
                 {% endif %}
             {% empty %}
@@ -89,10 +103,5 @@
             {% endfor %}
         </ul>
     </div>
-    <script>
-        $(document).ready(function() {
-            $('.django-select2').djangoSelect2();
-        });
-    </script>
 </body>
 </html>
