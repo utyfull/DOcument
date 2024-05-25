@@ -5,6 +5,19 @@
     <meta charset="UTF-8">
     <title>Your Files</title>
     <script>
+    
+    function debounce(func, delay) {
+        let timer;
+        return function() {
+            const context = this;
+            const args = arguments;
+            clearTimeout(timer);
+            timer = setTimeout(function() {
+                func.apply(context, args);
+            }, delay);
+        };
+    }
+
     function autoSubmitForm1() {
         document.getElementById('filter1').submit();
     }
@@ -15,14 +28,14 @@
 
     document.addEventListener('DOMContentLoaded', function() {
         document.querySelectorAll('#filter1 input, #filter1 select').forEach(function(element) {
-            element.addEventListener('change', autoSubmitForm1);
+            element.addEventListener('change', debounce(autoSubmitForm1, 300));
         });
 
         document.querySelectorAll('#filter2 input, #filter2 select').forEach(function(element) {
-            element.addEventListener('change', autoSubmitForm2);
+            element.addEventListener('change', debounce(autoSubmitForm2, 300));
         });
     });
-</script>
+</script> 
 </head>
 <body>
     <h1>Your Files</h1>
@@ -45,12 +58,14 @@
 
     <!-- Список собственных файлов с возможностью скачивания и удаления -->
     <h2>Ваши файлы</h2>
-    <form id="filter1" method="get">
-        {{first_filter.form.as_p}}
+    <form id="filter1" method="get", action="{% url 'users:user_files' %}">
+        {% with form_prefix='first' %}
+            {{ first_filter.form.as_p }}
+        {% endwith %}
     </form>
     
     <ul>
-        {% for file in second_filter.qs %}
+        {% for file in first_filter.qs %}
             {% if file.user == request.user %}
                 <li> <a href="{% url 'users:view_own_file' file.pk %}">{{ file.name }}</a> (Published: {{ file.uploaded_at|date:"Y-m-d H:i:s"}})</li>
             {% endif %}
@@ -61,8 +76,10 @@
 
     <!-- Список файлов других пользователей с возможностью скачивания -->
     <h2>Файлы других пользователей</h2>
-    <form id="filter2" method="get">
-        {{second_filter.form.as_p}}
+    <form id="filter2" method="get", action="{% url 'users:user_files' %}">
+        {% with form_prefix='second' %}
+            {{ second_filter.form.as_p }}
+        {% endwith %}
     </form>
     <ul>
         {% for file in second_filter.qs %}

@@ -10,7 +10,7 @@ from .models import UserFile
 from .forms import UserFileForm
 from users.models import User, FileSignature
 from users.forms import UserLoginForm, UserRegistrationForm, CommentForm
-from django.http import FileResponse
+from django.http import FileResponse, QueryDict
 from django.shortcuts import get_object_or_404
 from .models import UserFile, SharedWith  # Убедитесь, что здесь импортирован SharedWith
 from django.db.models import Q
@@ -78,10 +78,10 @@ def user_files(request):
         Q(user=request.user) | Q(shared_with_entries__user=request.user)
     ).distinct()
 
-    filter_files = fileFilter(request.GET, prefix='first', queryset=user_files_queryset)
-    foreign_files_filter = foreign_fileFilter(request.GET, prefix='second', queryset=user_files_queryset)
+    first_filter = fileFilter(request.GET, prefix='first', queryset=user_files_queryset)
+    second_filter = foreign_fileFilter(request.GET, prefix='second', queryset=user_files_queryset)
 
-    return render(request, 'users/user_files.html', {'form': form, 'first_filter': filter_files, 'second_filter': foreign_files_filter})
+    return render(request, 'users/user_files.html', {'form': form, 'first_filter': first_filter, 'second_filter': second_filter})
 
 
 

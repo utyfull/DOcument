@@ -3,8 +3,8 @@ from .models import UserFile
 
 
 class fileFilter(django_filters.FilterSet):
-    name = django_filters.CharFilter(field_name='name', lookup_expr='icontains', label='Title')
-    uploaded_at = django_filters.OrderingFilter(
+    name1 = django_filters.CharFilter(field_name='name', lookup_expr='icontains', label='Title')
+    uploaded_at1 = django_filters.OrderingFilter(
         fields=(
             ('uploaded_at', 'uploaded_at'),
         ),
@@ -16,13 +16,13 @@ class fileFilter(django_filters.FilterSet):
 
     class Meta:
         model=UserFile
-        fields = ['name', 'uploaded_at']
+        fields = ['name1', 'uploaded_at1']
 
 
 class foreign_fileFilter(django_filters.FilterSet):
-    name = django_filters.CharFilter(field_name='name', lookup_expr='icontains', label='Title')
-    author = django_filters.CharFilter(field_name='user', lookup_expr='icontains', label='Author')
-    uploaded_at = django_filters.OrderingFilter(
+    name2 = django_filters.CharFilter(field_name='name', lookup_expr='icontains', label='Title')
+    author2 = django_filters.CharFilter(field_name='user__username', lookup_expr='icontains', label='Author')
+    uploaded_at2 = django_filters.OrderingFilter(
         fields=(
             ('uploaded_at', 'uploaded_at'),
         ),
@@ -34,4 +34,4 @@ class foreign_fileFilter(django_filters.FilterSet):
 
     class Meta:
         model=UserFile
-        fields = ['name', 'author', 'uploaded_at']
+        fields = ['name2', 'author2', 'uploaded_at2']
