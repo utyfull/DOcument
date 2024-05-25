@@ -1,3 +1,4 @@
+
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -22,21 +23,21 @@
         };
     }
 
-        function autoSubmitForm1() {
-            document.getElementById('filter1').submit();
-        }
+    function autoSubmitForm1() {
+        document.getElementById('filter1').submit();
+    }
 
-        function autoSubmitForm2() {
-            document.getElementById('filter2').submit();
-        }
+    function autoSubmitForm2() {
+        document.getElementById('filter2').submit();
+    }
 
-        document.querySelectorAll('#filter1 input, #filter1 select').forEach(function(element) {
-            element.addEventListener('change', debounce(autoSubmitForm1, 300));
-        });
+    document.querySelectorAll('#filter1 input, #filter1 select').forEach(function(element) {
+        element.addEventListener('change', debounce(autoSubmitForm1, 300));
+    });
 
-        document.querySelectorAll('#filter2 input, #filter2 select').forEach(function(element) {
-            element.addEventListener('change', debounce(autoSubmitForm2, 300));
-        });
+    document.querySelectorAll('#filter2 input, #filter2 select').forEach(function(element) {
+        element.addEventListener('change', debounce(autoSubmitForm2, 300));
+    });
 </script> 
 </head>
 <body>
@@ -94,13 +95,6 @@
             {% endfor %}
         </ul>
 
-    <!-- Форма для загрузки новых файлов -->
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Upload File</button>
-    </form>
-
     <!-- Список собственных файлов с возможностью скачивания и удаления -->
     <h2>Ваши файлы</h2>
     <form id="filter1" method="get", action="{% url 'users:user_files' %}">
@@ -113,23 +107,6 @@
         {% for file in first_filter.qs %}
             {% if file.user == request.user %}
                 <li> <a href="{% url 'users:view_own_file' file.pk %}">{{ file.name }}</a> (Published: {{ file.uploaded_at|date:"Y-m-d H:i:s"}})</li>
-            {% endif %}
-        {% empty %}
-            <li>No file found.</li>
-        {% endfor %}
-    </ul>
-
-    <!-- Список файлов других пользователей с возможностью скачивания -->
-    <h2>Файлы других пользователей</h2>
-    <form id="filter2" method="get", action="{% url 'users:user_files' %}">
-        {% with form_prefix='second' %}
-            {{ second_filter.form.as_p }}
-        {% endwith %}
-    </form>
-    <ul>
-        {% for file in second_filter.qs %}
-            {% if file.user != request.user %}
-                <li> <a href="{% url 'users:view_foreign_file' file.pk %}">{{ file.name }}</a> From {{ file.user.username }} (Published: {{ file.uploaded_at|date:"Y-m-d H:i:s"}})</li>
             {% endif %}
         {% empty %}
             <li>No file found.</li>
