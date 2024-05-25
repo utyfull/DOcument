@@ -1,6 +1,6 @@
 from django.urls import path
 from django.urls import include
-from users.views import autorization, registration, user_files, delete_file, view_own_file, view_foreign_file, editor, save_document #download
+from users.views import autorization, registration, user_files, delete_file, view_own_file, view_foreign_file, editor, save_document, remove_shared_user #download
 from . import views
 
 
@@ -14,7 +14,8 @@ urlpatterns = [
     path('files/view/shared/<int:file_id>/', views.view_foreign_file, name='view_foreign_file'),
     path('files/delete/<int:file_id>/', delete_file, name='delete_file'),
     path('files/view/own/<int:file_id>/editor/', views.editor, name='editor'),
-    path('save-document/', views.save_document, name='save_document')
+    path('save-document/', views.save_document, name='save_document'),
+    path('files/remove_shared_user/<int:file_id>/<int:user_id>/', remove_shared_user, name='remove_shared_user'),
 
 
     # URL для удаления файла

@@ -4,7 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <title>Your Files</title>
+    <link rel="stylesheet" href="{% static 'css/user.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
+<<<<<<< HEAD
     
     function debounce(func, delay) {
         let timer;
@@ -21,12 +26,19 @@
     function autoSubmitForm1() {
         document.getElementById('filter1').submit();
     }
+=======
+    $(document).ready(function() {
+        $('#id_shared_users').select2();
+>>>>>>> a17a0e0a59a6b3878a8a9d74409a56f86ae52f1d
 
-    function autoSubmitForm2() {
-        document.getElementById('filter2').submit();
-    }
+        function autoSubmitForm1() {
+            document.getElementById('filter1').submit();
+        }
 
-    document.addEventListener('DOMContentLoaded', function() {
+        function autoSubmitForm2() {
+            document.getElementById('filter2').submit();
+        }
+
         document.querySelectorAll('#filter1 input, #filter1 select').forEach(function(element) {
             element.addEventListener('change', debounce(autoSubmitForm1, 300));
         });
@@ -35,19 +47,66 @@
             element.addEventListener('change', debounce(autoSubmitForm2, 300));
         });
     });
+<<<<<<< HEAD
 </script> 
+=======
+    </script>
+>>>>>>> a17a0e0a59a6b3878a8a9d74409a56f86ae52f1d
 </head>
 <body>
-    <h1>Your Files</h1>
+    <div class="container">
+        <h1>Your Files</h1>
 
-    <!-- Отображение сообщений -->
-    {% if messages %}
-        <ul class="messages">
-            {% for message in messages %}
-                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        <!-- Отображение сообщений -->
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li class="message {% if message.tags %}{{ message.tags }}{% endif %}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        <!-- Форма для загрузки новых файлов -->
+        <div class="upload-form">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn">Upload File</button>
+            </form>
+        </div>
+
+        <!-- Список собственных файлов с возможностью скачивания и удаления -->
+        <h2>Ваши файлы</h2>
+        <form id="filter1" method="get">
+            {{ first_filter.form.as_p }}
+        </form>
+
+        <ul class="file-list">
+            {% for file in second_filter.qs %}
+                {% if file.user == request.user %}
+                    <li class="file-item">
+                        <a href="{% url 'users:view_own_file' file.pk %}">{{ file.name }}</a>
+                        <span class="file-date">(Published: {{ file.uploaded_at|date:"Y-m-d H:i:s"}})</span>
+                        <!-- Форма для удаления файла -->
+                        <form method="post" action="{% url 'users:delete_file' file.pk %}" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn-delete" onclick="return confirm('Вы уверены, что хотите удалить этот файл?');">Удалить</button>
+                        </form>
+                        <!-- Список пользователей, с которыми поделились файлом -->
+                        <ul class="shared-users">
+                            {% for shared_user in file.shared_with_entries.all %}
+                                <li>
+                                    {{ shared_user.user.username }}
+                                    <a href="{% url 'users:remove_shared_user' file.pk shared_user.user.pk %}" class="btn-delete">Убрать</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                {% endif %}
+            {% empty %}
+                <li>No file found.</li>
             {% endfor %}
         </ul>
-    {% endif %}
 
     <!-- Форма для загрузки новых файлов -->
     <form method="post" enctype="multipart/form-data">
@@ -96,5 +155,23 @@
             $('.django-select2').djangoSelect2();
         });
     </script>
+        <!-- Список файлов других пользователей с возможностью скачивания -->
+        <h2>Файлы других пользователей</h2>
+        <form id="filter2" method="get">
+            {{ second_filter.form.as_p }}
+        </form>
+        <ul class="file-list">
+            {% for file in second_filter.qs %}
+                {% if file.user != request.user %}
+                    <li class="file-item">
+                        <a href="{% url 'users:view_foreign_file' file.pk %}">{{ file.name }}</a>
+                        <span class="file-date">From {{ file.user.username }} (Published: {{ file.uploaded_at|date:"Y-m-d H:i:s"}})</span>
+                    </li>
+                {% endif %}
+            {% empty %}
+                <li>No file found.</li>
+            {% endfor %}
+        </ul>
+    </div>
 </body>
 </html>
