@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Your Files</title>
+    <link rel="stylesheet" href="{% static 'css/user.css' %}">
     <script>
     function autoSubmitForm1() {
         document.getElementById('filter1').submit();
@@ -22,67 +23,72 @@
             element.addEventListener('change', autoSubmitForm2);
         });
     });
-</script>
+    </script>
 </head>
 <body>
-    <h1>Your Files</h1>
+    <div class="container">
+        <h1>Your Files</h1>
 
-    <!-- Отображение сообщений -->
-    {% if messages %}
-        <ul class="messages">
-            {% for message in messages %}
-                <li>{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        <!-- Отображение сообщений -->
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li class="message {% if message.tags %}{{ message.tags }}{% endif %}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        <!-- Форма для загрузки новых файлов -->
+        <div class="upload-form">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn">Upload File</button>
+            </form>
+        </div>
+
+        <!-- Список собственных файлов с возможностью скачивания и удаления -->
+        <h2>Ваши файлы</h2>
+        <form id="filter1" method="get">
+            {{ first_filter.form.as_p }}
+        </form>
+
+        <ul class="file-list">
+            {% for file in second_filter.qs %}
+                {% if file.user == request.user %}
+                    <li class="file-item">
+                        <a href="{% url 'users:view_own_file' file.pk %}">{{ file.name }}</a>
+                        <span class="file-date">(Published: {{ file.uploaded_at|date:"Y-m-d H:i:s"}})</span>
+                        <!-- Форма для удаления файла -->
+                        <form method="post" action="{% url 'users:delete_file' file.pk %}" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn-delete" onclick="return confirm('Вы уверены, что хотите удалить этот файл?');">Удалить</button>
+                        </form>
+                    </li>
+                {% endif %}
+            {% empty %}
+                <li>No file found.</li>
             {% endfor %}
         </ul>
-    {% endif %}
 
-    <!-- Форма для загрузки новых файлов -->
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Upload File</button>
-    </form>
-
-    <!-- Список собственных файлов с возможностью скачивания и удаления -->
-    <h2>Ваши файлы</h2>
-    <form id="filter1" method="get">
-        {{ first_filter.form.as_p }}
-    </form>
-
-    <ul>
-        {% for file in second_filter.qs %}
-            {% if file.user == request.user %}
-                <li>
-                    <a href="{% url 'users:view_own_file' file.pk %}">{{ file.name }}</a> (Published: {{ file.uploaded_at|date:"Y-m-d H:i:s"}})
-                    <!-- Форма для удаления файла -->
-                    <form method="post" action="{% url 'users:delete_file' file.pk %}" style="display:inline;">
-                        {% csrf_token %}
-                        <button type="submit" onclick="return confirm('Вы уверены, что хотите удалить этот файл?');">Удалить</button>
-                    </form>
-                </li>
-            {% endif %}
-        {% empty %}
-            <li>No file found.</li>
-        {% endfor %}
-    </ul>
-
-    <!-- Список файлов других пользователей с возможностью скачивания -->
-    <h2>Файлы других пользователей</h2>
-    <form id="filter2" method="get">
-        {{ second_filter.form.as_p }}
-    </form>
-    <ul>
-        {% for file in second_filter.qs %}
-            {% if file.user != request.user %}
-                <li>
-                    <a href="{% url 'users:view_foreign_file' file.pk %}">{{ file.name }}</a> From {{ file.user.username }} (Published: {{ file.uploaded_at|date:"Y-m-d H:i:s"}})
-                </li>
-            {% endif %}
-        {% empty %}
-            <li>No file found.</li>
-        {% endfor %}
-    </ul>
-
+        <!-- Список файлов других пользователей с возможностью скачивания -->
+        <h2>Файлы других пользователей</h2>
+        <form id="filter2" method="get">
+            {{ second_filter.form.as_p }}
+        </form>
+        <ul class="file-list">
+            {% for file in second_filter.qs %}
+                {% if file.user != request.user %}
+                    <li class="file-item">
+                        <a href="{% url 'users:view_foreign_file' file.pk %}">{{ file.name }}</a>
+                        <span class="file-date">From {{ file.user.username }} (Published: {{ file.uploaded_at|date:"Y-m-d H:i:s"}})</span>
+                    </li>
+                {% endif %}
+            {% empty %}
+                <li>No file found.</li>
+            {% endfor %}
+        </ul>
+    </div>
     <script>
         $(document).ready(function() {
             $('.django-select2').djangoSelect2();
