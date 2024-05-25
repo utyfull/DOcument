@@ -1,41 +1,51 @@
 <!-- users/view_file.html -->
+
 {% extends 'users/base.html' %}
 
 {% block main %}
-  <h1>{{ user_file.name }}</h1>
-  <!-- Предоставляем прямую ссылку на файл -->
-  <a href="{{ user_file.file.url }}" target="_blank">Открыть файл</a>
+  <div class="container">
+    <h1>{{ user_file.name }}</h1>
+    <!-- Предоставляем прямую ссылку на файл -->
+    <a href="{{ user_file.file.url }}" target="_blank" class="btn">Открыть файл</a>
 
-  <!-- Если есть сообщение об ошибке, показываем его здесь -->
-  {% if error_message %}
-    <p style="color: red;">{{ error_message }}</p>
-  {% endif %}
+    <!-- Если есть сообщение об ошибке, показываем его здесь -->
+    {% if error_message %}
+      <p class="message error">{{ error_message }}</p>
+    {% endif %}
 
-  <!-- Форма для подписания документа -->
-  <h2>Подписать документ с помощью PFX файла</h2>
-  <form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ pfx_form.as_p }}
-    <button type="submit">Подписать файл</button>
-  </form>
 
-  <!-- Выводим сообщения Django -->
-  {% for message in messages %}
-    <p style="color: {% if message.tags %}{{ message.tags }}{% else %}blue{% endif %};">{{ message }}</p>
-  {% endfor %}
-
-  <h2>Комментарии</h2>
-  <ul>
-    {% for comment in comments %}
-      <li>
-        <strong>{{ comment.user.username }}</strong> ({{ comment.created_at }}):<br>
-        {{ comment.text }}
-      </li>
-    {% empty %}
-      <li>Комментариев нет.</li>
+    <!-- Выводим сообщения Django -->
+    {% for message in messages %}
+      <p class="message {% if message.tags %}{{ message.tags }}{% else %}blue{% endif %};">{{ message }}</p>
     {% endfor %}
-  </ul=>
 
-  {% comment %} <a href="{% url 'users:view_own_file' file.pk %}"> Edit </a> {% endcomment %}
+    <h2>Комментарии</h2>
+    <ul class="comment-list">
+      {% for comment in comments %}
+        <li class="comment-item">
+          <strong>{{ comment.user.username }}</strong> ({{ comment.created_at }}):<br>
+          {{ comment.text }}
+        </li>
+      {% empty %}
+        <li>Комментариев нет.</li>
+      {% endfor %}
+    </ul>
+
+    <h2>Добавить комментарий</h2>
+    <form method="post" class="form">
+      {% csrf_token %}
+      {{ comment_form.as_p }}
+      <button type="submit" class="btn">Добавить комментарий</button>
+    </form>
+
+    <h2>Пользователи с доступом к файлу</h2>
+    <ul class="shared-users">
+      {% for user in signed_users %}
+        <li>
+          {{ user.username }} - {% if user.signed %}Подписан{% else %}Не подписан{% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
 {% endblock %}
 

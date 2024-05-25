@@ -126,19 +126,34 @@ def view_own_file(request, file_id):
                 user_file.content = signed_content
                 user_file.save()
 
+                # Сохраняем информацию о подписи
+                FileSignature.objects.create(user_file=user_file, user=request.user)
+
                 messages.success(request, 'Файл успешно подписан.')
-                return redirect('users:view_foreign_file', file_id=user_file.id)  # Перенаправляем на страницу просмотра файла
+                return redirect('users:view_own_file',
+                                file_id=user_file.id)  # Перенаправляем на страницу просмотра файла
             except Exception as e:
                 messages.error(request,
                                f'Не удалось извлечь ключ из PFX файла. Проверьте правильность пароля. Ошибка: {e}')
 
     comments = user_file.comments.all()
+    shared_users = SharedWith.objects.filter(user_file=user_file).select_related('user')
+
+    # Добавим информацию о том, был ли документ подписан каждым пользователем
+    signed_users = []
+    for shared_user in shared_users:
+        signed = FileSignature.objects.filter(user_file=user_file, user=shared_user.user).exists()
+        signed_users.append({
+            'username': shared_user.user.username,
+            'signed': signed
+        })
 
     return render(request, 'users/view_file.html', {
         'user_file': user_file,
         'pfx_form': pfx_form,
         'comment_form': comment_form,
         'comments': comments,
+        'signed_users': signed_users,
     })
 
 
@@ -150,6 +165,7 @@ def view_foreign_file(request, file_id):
 
     if request.method == 'POST':
         if 'pfx_file' in request.FILES:
+            # Проверяем, подписал ли пользователь уже этот файл
             if FileSignature.objects.filter(user=request.user, user_file=user_file).exists():
                 messages.error(request, 'Вы уже подписали этот файл.')
                 return redirect('users:view_foreign_file', file_id=user_file.id)
@@ -178,11 +194,13 @@ def view_foreign_file(request, file_id):
                     FileSignature.objects.create(user=request.user, user_file=user_file)
 
                     messages.success(request, 'Файл успешно подписан.')
-                    send_custom_email("Sign DOcument", f"user {request.user.username} signed file {user_file.name}", [user_file.user.username])
-                    send_custom_email("Sign DOcument", f"You signed file {user_file.name}", [request.user.username])
+                    send_custom_email("Sign Document", f"user {request.user.username} signed file {user_file.name}",
+                                      [user_file.user.email])
+                    send_custom_email("Sign Document", f"You signed file {user_file.name}", [request.user.email])
                     return redirect('users:view_foreign_file', file_id=user_file.id)
                 except Exception as e:
-                    messages.error(request, f'Не удалось извлечь ключ из PFX файла. Проверьте правильность пароля. Ошибка: {e}')
+                    messages.error(request,
+                                   f'Не удалось извлечь ключ из PFX файла. Проверьте правильность пароля. Ошибка: {e}')
         else:
             comment_form = CommentForm(request.POST)
             if comment_form.is_valid():
