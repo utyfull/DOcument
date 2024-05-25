@@ -1,4 +1,3 @@
-
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -10,35 +9,26 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
-    
-    function debounce(func, delay) {
-        let timer;
-        return function() {
-            const context = this;
-            const args = arguments;
-            clearTimeout(timer);
-            timer = setTimeout(function() {
-                func.apply(context, args);
-            }, delay);
-        };
-    }
+    $(document).ready(function() {
+        $('#id_shared_users').select2();
+        
+        function autoSubmitForm1() {
+            document.getElementById('filter1').submit();
+        }
 
-    function autoSubmitForm1() {
-        document.getElementById('filter1').submit();
-    }
+        function autoSubmitForm2() {
+            document.getElementById('filter2').submit();
+        }
 
-    function autoSubmitForm2() {
-        document.getElementById('filter2').submit();
-    }
+        document.querySelectorAll('#filter1 input, #filter1 select').forEach(function(element) {
+            element.addEventListener('change', autoSubmitForm1);
+        });
 
-    document.querySelectorAll('#filter1 input, #filter1 select').forEach(function(element) {
-        element.addEventListener('change', debounce(autoSubmitForm1, 300));
+        document.querySelectorAll('#filter2 input, #filter2 select').forEach(function(element) {
+            element.addEventListener('change', autoSubmitForm2);
+        });
     });
-
-    document.querySelectorAll('#filter2 input, #filter2 select').forEach(function(element) {
-        element.addEventListener('change', debounce(autoSubmitForm2, 300));
-    });
-</script> 
+    </script>
 </head>
 <body>
     <div class="container">
@@ -69,7 +59,7 @@
         </form>
 
         <ul class="file-list">
-            {% for file in second_filter.qs %}
+            {% for file in first_filter.qs %}
                 {% if file.user == request.user %}
                     <li class="file-item">
                         <a href="{% url 'users:view_own_file' file.pk %}">{{ file.name }}</a>
@@ -95,29 +85,7 @@
             {% endfor %}
         </ul>
 
-    <!-- Список собственных файлов с возможностью скачивания и удаления -->
-    <h2>Ваши файлы</h2>
-    <form id="filter1" method="get", action="{% url 'users:user_files' %}">
-        {% with form_prefix='first' %}
-            {{ first_filter.form.as_p }}
-        {% endwith %}
-    </form>
-    
-    <ul>
-        {% for file in first_filter.qs %}
-            {% if file.user == request.user %}
-                <li> <a href="{% url 'users:view_own_file' file.pk %}">{{ file.name }}</a> (Published: {{ file.uploaded_at|date:"Y-m-d H:i:s"}})</li>
-            {% endif %}
-        {% empty %}
-            <li>No file found.</li>
-        {% endfor %}
-    </ul>
 
-    <script>
-        $(document).ready(function() {
-            $('.django-select2').djangoSelect2();
-        });
-    </script>
         <!-- Список файлов других пользователей с возможностью скачивания -->
         <h2>Файлы других пользователей</h2>
         <form id="filter2" method="get">
