@@ -1,4 +1,4 @@
 # DOcument
 WEB-application for document management 
-Allows you to sign documents using a .pfx key, select a chain of users for signing, which supports the possibility of remote file editing​
+Allows you to sign documents using a .pfx key, select a chain of users for signing, which supports the possibility of remote file editing​\n
 Curren project state(sign branch)
